@@ -26,13 +26,23 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Prerequisites
+
+npm version 7.x.x
+node version 14.x.x
+nest version 8.x.x
+
 ## Installation
+
+install nest cli globally
 
 ```bash
 $ npm install
 ```
 
 ## Running the app
+
+add .env or .env.stage.dev
 
 ```bash
 # development
