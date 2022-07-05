@@ -40,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async signIn(
+  async login(
     authCredentialDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
     const { email, password } = authCredentialDto;
