@@ -12,10 +12,13 @@ export class User {
   id: number;
 
   @Column({ unique: true, length: 50 })
-  username: string;
+  awsUserName: string;
 
-  @Column()
-  password: string;
+  @Column({ unique: true, length: 50, nullable: true })
+  email: string;
+
+  @Column({ unique: true, length: 15, nullable: true })
+  phoneNo: string;
 
   @Column({ length: 50, nullable: true })
   firstName: string;
@@ -23,26 +26,11 @@ export class User {
   @Column({ length: 50, nullable: true })
   lastName: string;
 
-  @Column({ length: 50, nullable: true })
-  email: string;
-
-  @Column({ default: false })
-  isEmailVerified: boolean;
-
-  @Column({ length: 15, nullable: true })
-  mobile: string;
-
-  @Column({ default: false })
-  isMobileVerified: boolean;
-
   @Column({ nullable: true })
   profilePhoto: string;
 
   @Column({ nullable: true })
   coId: number;
-
-  @Column({ length: 100, nullable: true })
-  passwordResetCode: string;
 
   @Column({ nullable: true })
   lastLogin: Date;
