@@ -7,9 +7,11 @@ import {
 import axios from 'axios';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AuthorizeGuard implements CanActivate {
+export class AwsCognitoGuard implements CanActivate {
+  constructor(private configService: ConfigService) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
@@ -32,7 +34,7 @@ export class AuthorizeGuard implements CanActivate {
 
   async authorizedByCognito(authHeader?: string): Promise<any> {
     if (!authHeader) {
-      throw new UnauthorizedException(`Authorization header is required 5`);
+      throw new UnauthorizedException(`Authorization header is required`);
     }
     const tokenArray = authHeader.split(' ', 2);
     if (!tokenArray[0] || tokenArray[0].toLowerCase() !== 'bearer') {
@@ -46,7 +48,11 @@ export class AuthorizeGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       axios
         .get(
-          `https://cognito-idp.${process.env.COGNITO_REGION}.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`,
+          `https://cognito-idp.${this.configService.get(
+            'COGNITO_REGION',
+          )}.amazonaws.com/${this.configService.get(
+            'COGNITO_USER_POOL_ID',
+          )}/.well-known/jwks.json`,
           {
             headers: { 'Content-Type': 'application/json' },
           },
@@ -66,13 +72,13 @@ export class AuthorizeGuard implements CanActivate {
           });
           const decodedJwt = jwt.decode(token, { complete: true });
           if (!decodedJwt) {
-            reject(new Error('Not a valid JWT token 3'));
+            reject(new Error('Not a valid JWT token'));
           }
           const kid = decodedJwt['header'].kid;
 
           const pem = pems[kid];
           if (!pem) {
-            reject(new Error('Invalid token 1'));
+            reject(new Error('Invalid token'));
           }
           jwt.verify(token, pem, (err, payload) => {
             if (err) {
