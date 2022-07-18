@@ -1,9 +1,12 @@
+import { Company } from 'src/company/entities/company.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -30,9 +33,6 @@ export class User {
   profilePhoto: string;
 
   @Column({ nullable: true })
-  coId: number;
-
-  @Column({ nullable: true })
   lastLogin: Date;
 
   @Column({ nullable: true, default: 0 })
@@ -46,6 +46,10 @@ export class User {
 
   @Column({ length: 10, default: 'disabled' })
   status: string;
+
+  @OneToOne((_type) => Company)
+  @JoinColumn()
+  company: Company;
 
   @CreateDateColumn()
   createdOn: Date;
