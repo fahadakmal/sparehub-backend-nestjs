@@ -4,6 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { CompanyModule } from './company/company.module';
+import { BankModule } from './common/modules/bank/bank.module';
+import { AddressModule } from './common/modules/address/address.module';
+import { DocumentTypeModule } from './common/modules/documentType/documentType.module';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { CompanyModule } from './company/company.module';
     }),
     AuthModule,
     CompanyModule,
+    BankModule,
+    AddressModule,
+    DocumentTypeModule,
   ],
   exports: [],
   controllers: [],

@@ -8,43 +8,42 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { City } from './city.entity';
+import { City } from 'src/common/modules/address/entities/city.entity';
 import { CompanyBank } from './company_bank.entity';
 import { CompanyDocument } from './company_document.entity';
 import { CompanyStore } from './company_store.entity';
-import { Country } from './country.entity';
-import { State } from './state.entity';
+import { State } from '../../common/modules/address/entities/state.entity';
 
 @Entity()
 export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   companyName: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   companyNameAr: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   displayName: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   displayNameAr: string;
 
-  @Column({ length: 10, nullable: true })
+  @Column({ length: 10 })
   businessType: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   registrationNo: string;
 
-  @Column({ nullable: true })
+  @Column()
   logo: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   inchargeUsername: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   email: string;
 
   @Column({ default: false })
@@ -53,10 +52,10 @@ export class Company {
   @Column({ length: 50, nullable: true })
   website: string;
 
-  @Column({ nullable: true })
+  @Column()
   address1: string;
 
-  @Column({ nullable: true })
+  @Column()
   address2: string;
 
   @OneToOne(() => City)

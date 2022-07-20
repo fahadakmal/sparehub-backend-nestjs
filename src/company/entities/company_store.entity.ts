@@ -8,9 +8,9 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { City } from './city.entity';
+import { City } from 'src/common/modules/address/entities/city.entity';
 import { Company } from './company.entity';
-import { State } from './state.entity';
+import { State } from '../../common/modules/address/entities/state.entity';
 
 @Entity()
 export class CompanyStore {
