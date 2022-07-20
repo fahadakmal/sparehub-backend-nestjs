@@ -15,7 +15,7 @@ import { City } from './entities/city.entity';
 import { Country } from './entities/country.entity';
 import { State } from './entities/state.entity';
 @Controller('address')
-// @UseGuards(AwsCognitoGuard)
+@UseGuards(AwsCognitoGuard)
 export class AddressController {
   constructor(private addressService: AddressService) {}
 
@@ -29,5 +29,11 @@ export class AddressController {
   @Get('/:id/states')
   getStates(@Param('id') countryId: number): Promise<State[]> {
     return this.addressService.getStates(countryId);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('/:id/cities')
+  getCities(@Param('id') stateId: number): Promise<City[]> {
+    return this.addressService.getCities(stateId);
   }
 }
