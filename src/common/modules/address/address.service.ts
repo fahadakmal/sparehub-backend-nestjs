@@ -19,8 +19,8 @@ export class AddressService {
 
   async getCountries(): Promise<Country[]> {
     try {
-      const tasks = await this.countryRepositery.find();
-      return tasks;
+      const countries = await this.countryRepositery.find();
+      return countries;
     } catch (error) {
       throw new InternalServerErrorException();
     }
