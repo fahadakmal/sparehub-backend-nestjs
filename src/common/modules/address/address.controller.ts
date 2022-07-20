@@ -1,4 +1,13 @@
-import { Controller, Get, UseGuards, Body, Post, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Body,
+  Post,
+  Param,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
 import { AddressService } from './address.service';
 import { CreateCountryDto } from './dtos/createCountry.dto';
@@ -13,5 +22,11 @@ export class AddressController {
   @Get('/countries')
   getCountries(): Promise<Country[]> {
     return this.addressService.getCountries();
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('/:id/cities')
+  getCities(@Param('id') stateId: number): Promise<City[]> {
+    return this.addressService.getCities(stateId);
   }
 }
