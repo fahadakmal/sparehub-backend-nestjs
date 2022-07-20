@@ -19,9 +19,16 @@ import { State } from './entities/state.entity';
 export class AddressController {
   constructor(private addressService: AddressService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/countries')
   getCountries(): Promise<Country[]> {
     return this.addressService.getCountries();
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('/:id/states')
+  getStates(@Param('id') countryId: number): Promise<State[]> {
+    return this.addressService.getStates(countryId);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -22,9 +23,11 @@ export class Country {
   @Column({ length: 50, nullable: true })
   countryNameAr: string;
 
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 
