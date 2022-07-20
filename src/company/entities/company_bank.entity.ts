@@ -9,7 +9,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Bank } from './bank.entity';
+import { Bank } from '../../common/modules/bank/entities/bank.entity';
 import { Company } from './company.entity';
 
 @Entity()
