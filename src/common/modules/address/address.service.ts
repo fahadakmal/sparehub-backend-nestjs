@@ -36,4 +36,15 @@ export class AddressService {
       throw new InternalServerErrorException();
     }
   }
+
+  async getCities(stateId: number): Promise<City[]> {
+    try {
+      const cities = await this.cityRepositery.find({
+        where: { state: { id: stateId } },
+      });
+      return cities;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
 }
