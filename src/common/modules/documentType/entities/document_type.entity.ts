@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -14,12 +15,15 @@ export class DocumentType {
   @Column({ length: 50, nullable: true })
   documentName: string;
 
+  @Exclude()
   @Column({ default: false })
   isActive: boolean;
 
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }
