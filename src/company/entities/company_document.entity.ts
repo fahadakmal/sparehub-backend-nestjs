@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Company } from './company.entity';
-import { DocumentType } from './document_type.entity';
+import { DocumentType } from '../../common/modules/documentType/entities/document_type.entity';
 
 @Entity()
 export class CompanyDocument {
