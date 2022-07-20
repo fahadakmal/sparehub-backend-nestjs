@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -30,9 +31,11 @@ export class State {
   @OneToMany((_type) => City, (city) => city.state)
   cities: City[];
 
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }
