@@ -25,4 +25,15 @@ export class AddressService {
       throw new InternalServerErrorException();
     }
   }
+
+  async getStates(countryId: number): Promise<State[]> {
+    try {
+      const states = await this.stateRepositery.find({
+        where: { country: { id: countryId } },
+      });
+      return states;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
 }
