@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
   Entity,
@@ -30,6 +31,11 @@ export class State {
 
   @OneToMany((_type) => City, (city) => city.state)
   cities: City[];
+
+  @OneToMany((_type) => CompanyStore, (companyStore) => companyStore.state, {
+    eager: false,
+  })
+  companyStores: CompanyStore[];
 
   @Exclude()
   @CreateDateColumn()
