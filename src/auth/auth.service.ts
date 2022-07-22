@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -50,6 +51,9 @@ export class AuthService {
     const user = await this.userRepositery.findOneBy({
       awsUserName: username,
     });
+    if (!user) {
+      throw new NotFoundException(`User with username ${username} not found`);
+    }
     return user;
   }
 }

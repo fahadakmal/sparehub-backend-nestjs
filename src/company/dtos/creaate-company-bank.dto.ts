@@ -1,4 +1,5 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 
 export class CreateCompanyBankDto {
   @IsOptional()
@@ -10,7 +11,7 @@ export class CreateCompanyBankDto {
   @IsString()
   iban: string;
   @IsNumber()
-  bankId: number;
+  bank: Bank;
   @IsString()
   branchCode: string;
   @IsBoolean()
