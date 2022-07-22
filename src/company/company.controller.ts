@@ -1,4 +1,12 @@
-import { Controller, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  Get,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
 import { User } from 'src/auth/user.entity';
@@ -9,11 +17,18 @@ import { CreateCompanyDto } from './dtos/create-company.dto';
 @UseGuards(AwsCognitoGuard)
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
+
   @Post('/saveApplication')
   saveCompany(
     @Body() createCompanyDto: CreateCompanyDto,
     @GetUser() user: User,
   ) {
     return this.companyService.saveCompany(user, createCompanyDto);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get()
+  getCompany(@GetUser() user: User) {
+    return this.companyService.getCompany(user);
   }
 }
