@@ -58,4 +58,8 @@ export class CompanyService {
       throw new Error(error.message);
     }
   }
+
+  async getCompany(user: User) {
+    return this.companyRepositery.findOneBy({ id: user.company.id });
+  }
 }
