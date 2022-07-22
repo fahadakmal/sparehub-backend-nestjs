@@ -6,42 +6,40 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import { Bank } from '../../common/modules/bank/entities/bank.entity';
-import { Company } from './company.entity';
 
 @Entity()
 export class CompanyBank {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((_type) => Company, (company) => company.banks)
-  company: Company;
-
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   accountTitle: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   accountNo: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   iban: string;
 
-  @OneToOne(() => Bank)
-  @JoinColumn()
-  bankId: Bank;
+  @ManyToOne((_type) => Bank, (bank) => bank.companyBanks, { eager: true })
+  bank: Bank;
 
-  @Column({ length: 20 })
+  @Column({ length: 20, nullable: true })
   branchCode: string;
 
   @Column({ default: true })
   status: boolean;
 
+  @Column({ nullable: false })
+  saveAsDraft: boolean;
+
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

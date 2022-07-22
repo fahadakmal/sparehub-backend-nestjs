@@ -8,6 +8,7 @@ import { CompanyBank } from './entities/company_bank.entity';
 import { CompanyDocument } from './entities/company_document.entity';
 import { CompanyStore } from './entities/company_store.entity';
 import { Company } from './entities/company.entity';
+import { User } from 'src/auth/user.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Company } from './entities/company.entity';
       CompanyDocument,
       CompanyStore,
       Company,
+      User,
     ]),
   ],
   controllers: [CompanyController],

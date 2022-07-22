@@ -1,10 +1,12 @@
 import { Exclude } from 'class-transformer';
+import { CompanyBank } from 'src/company/entities/company_bank.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -29,4 +31,9 @@ export class Bank {
   @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
+
+  @OneToMany((_type) => CompanyBank, (companyBank) => companyBank.bank, {
+    eager: false,
+  })
+  companyBanks: CompanyBank[];
 }

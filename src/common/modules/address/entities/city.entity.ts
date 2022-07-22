@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
   Entity,
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { State } from './state.entity';
 
@@ -22,6 +24,11 @@ export class City {
 
   @ManyToOne((_type) => State, (state) => state.cities)
   state: State;
+
+  @OneToMany((_type) => CompanyStore, (companyStore) => companyStore.city, {
+    eager: false,
+  })
+  companyStores: CompanyStore[];
 
   @Exclude()
   @CreateDateColumn()

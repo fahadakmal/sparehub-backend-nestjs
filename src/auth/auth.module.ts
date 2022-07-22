@@ -9,6 +9,6 @@ import { AwsCognitoGuard } from './guards/awsCognito.guard';
   imports: [ConfigModule, TypeOrmModule.forFeature([User])],
   providers: [AuthService, AwsCognitoGuard],
   controllers: [AuthController],
-  exports: [],
+  exports: [AuthService],
 })
 export class AuthModule {}
