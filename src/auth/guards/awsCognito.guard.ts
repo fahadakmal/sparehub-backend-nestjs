@@ -8,10 +8,15 @@ import axios from 'axios';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { User } from '../user.entity';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class AwsCognitoGuard implements CanActivate {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private authService: AuthService,
+  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
@@ -24,11 +29,12 @@ export class AwsCognitoGuard implements CanActivate {
     try {
       const data = await this.authorizedByCognito(authorizationString);
       if (data.username) {
-        request.body['username'] = data.username;
+        const user: User = await this.authService.getUser(data.username);
+        request.user = user;
         return true;
       }
     } catch (e) {
-      throw new UnauthorizedException(e.message);
+      throw new UnauthorizedException('');
     }
   }
 
