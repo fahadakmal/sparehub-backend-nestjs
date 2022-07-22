@@ -34,7 +34,7 @@ export class AwsCognitoGuard implements CanActivate {
         return true;
       }
     } catch (e) {
-      throw new UnauthorizedException('');
+      throw new UnauthorizedException(e.message);
     }
   }
 

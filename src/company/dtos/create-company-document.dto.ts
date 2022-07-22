@@ -1,4 +1,5 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
 
 export class CreateCompanyDocumentDto {
   @IsOptional()
@@ -7,7 +8,7 @@ export class CreateCompanyDocumentDto {
   @IsString()
   documentPath: string;
   @IsNumber()
-  docTypeId: number;
+  docType: DocumentType;
   @IsBoolean()
   saveAsDraft: boolean;
 }

@@ -1,4 +1,6 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { City } from 'src/common/modules/address/entities/city.entity';
+import { State } from 'src/common/modules/address/entities/state.entity';
 
 export class CreateCompanyStoreoDto {
   @IsOptional()
@@ -14,11 +16,11 @@ export class CreateCompanyStoreoDto {
   @IsString()
   address2: string;
   @IsNumber()
-  cityId: number;
+  city: City;
   @IsString()
   zipcode: string;
   @IsNumber()
-  stateId: number;
+  state: State;
   @IsString()
   country: string;
   @IsString()

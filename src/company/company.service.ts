@@ -55,7 +55,7 @@ export class CompanyService {
         }
       }
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new Error(error.message);
     }
   }
 }
