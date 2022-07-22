@@ -5,19 +5,18 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { Company } from './company.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class CompanyStore {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((_type) => Company, (company) => company.stores)
+  @ManyToOne((_type) => Company, (company) => company.stores, { eager: false })
   company: Company;
 
   @Column()
@@ -32,16 +31,18 @@ export class CompanyStore {
   @Column()
   address2: string;
 
-  @OneToOne(() => City)
-  @JoinColumn()
-  cityId: City;
+  @ManyToOne((_type) => City, (city) => city.companyStores, {
+    eager: true,
+  })
+  city: City;
 
   @Column({ length: 10, nullable: true })
   zipcode: string;
 
-  @OneToOne(() => State)
-  @JoinColumn()
-  stateId: State;
+  @ManyToOne((_type) => State, (state) => state.companyStores, {
+    eager: true,
+  })
+  state: State;
 
   @Column({ length: 2, nullable: true })
   country: string;
@@ -56,14 +57,17 @@ export class CompanyStore {
   storePhone: string;
 
   @Column({ length: 50, nullable: true })
-  storeEmail: string;
+  @Column({ nullable: false })
+  saveAsDraft: boolean;
 
   @Column({ default: false })
   isActive: boolean;
 
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

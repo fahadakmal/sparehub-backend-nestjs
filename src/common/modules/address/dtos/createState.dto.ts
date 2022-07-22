@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
 
-export class CreateCountryDto {
+export class CreateStateDto {
   @IsString()
   @IsNotEmpty()
   stateName: string;

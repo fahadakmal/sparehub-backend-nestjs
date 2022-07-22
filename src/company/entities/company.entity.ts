@@ -7,12 +7,14 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { CompanyBank } from './company_bank.entity';
 import { CompanyDocument } from './company_document.entity';
 import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Company {
@@ -25,25 +27,25 @@ export class Company {
   @Column({ length: 100 })
   companyNameAr: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   displayName: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   displayNameAr: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   businessType: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   registrationNo: string;
 
-  @Column()
+  @Column({ nullable: true })
   logo: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   inchargeUsername: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   email: string;
 
   @Column({ default: false })
@@ -52,22 +54,24 @@ export class Company {
   @Column({ length: 50, nullable: true })
   website: string;
 
-  @Column()
+  @Column({ nullable: true })
   address1: string;
 
-  @Column()
+  @Column({ nullable: true })
   address2: string;
 
-  @OneToOne(() => City)
-  @JoinColumn()
-  cityId: City;
+  @ManyToOne((_type) => City, (city) => city.companyStores, {
+    eager: true,
+  })
+  city: City;
 
   @Column({ length: 10, nullable: true })
   zipcode: string;
 
-  @OneToOne(() => State)
-  @JoinColumn()
-  stateId: State;
+  @ManyToOne((_type) => State, (state) => state.companyStores, {
+    eager: true,
+  })
+  state: State;
 
   @Column({ length: 2, nullable: true })
   country: string;
@@ -75,18 +79,26 @@ export class Company {
   @Column({ length: 10, nullable: true })
   status: string;
 
+  @Column({ nullable: false })
+  saveAsDraft: boolean;
+
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 
-  @OneToMany((_type) => CompanyBank, (bank) => bank.company)
-  banks: CompanyBank[];
+  @OneToOne(() => CompanyBank, { eager: true })
+  @JoinColumn()
+  bank: CompanyBank;
 
-  @OneToMany((_type) => CompanyDocument, (document) => document.company)
+  @OneToMany((_type) => CompanyDocument, (document) => document.company, {
+    eager: true,
+  })
   documents: CompanyDocument[];
 
-  @OneToMany((_type) => CompanyStore, (store) => store.company)
+  @OneToMany((_type) => CompanyStore, (store) => store.company, { eager: true })
   stores: CompanyStore[];
 }
