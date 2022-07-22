@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
 import { Repository } from 'typeorm';
+import { CreateCompanyDto } from './dtos/create-company.dto';
 import { Company } from './entities/company.entity';
 import { CompanyBank } from './entities/company_bank.entity';
 import { CompanyDocument } from './entities/company_document.entity';
@@ -18,31 +20,25 @@ export class CompanyService {
     private companyDocumentRepositery: Repository<CompanyDocument>,
     @InjectRepository(CompanyStore)
     private companyStoreRepositery: Repository<CompanyStore>,
-    @InjectRepository(User)
-    private userRepositery: Repository<User>,
+    private authService: AuthService,
   ) {}
 
-  async saveCompany(username: string, createCompanyDto: any) {
+  async saveCompany(user: User, createCompanyDto: CreateCompanyDto) {
     try {
       const company = new Company();
-      this.companyRepositery.merge(company, createCompanyDto.company);
+      this.companyRepositery.merge(company, createCompanyDto.businessInfo);
       await this.companyRepositery.save(company);
-      await this.userRepositery.update(
-        { awsUserName: username },
-        { company: company },
-      );
-      if (createCompanyDto.companyBank) {
+      await this.authService.updateUserForCompanny(user, company);
+      if (createCompanyDto.bank) {
         const companyBank = new CompanyBank();
-        this.companyBankRepositery.merge(
-          companyBank,
-          createCompanyDto.companyBank,
-        );
+        this.companyBankRepositery.merge(companyBank, createCompanyDto.bank);
         await this.companyBankRepositery.save(companyBank);
         company.bank = companyBank;
+        await this.companyRepositery.save(company);
       }
 
-      if (createCompanyDto.companyStores) {
-        for (const store of createCompanyDto.companyStores) {
+      if (createCompanyDto.stores) {
+        for (const store of createCompanyDto.stores) {
           const companyStore = new CompanyStore();
           companyStore.company = company;
           this.companyStoreRepositery.merge(companyStore, store);
@@ -50,20 +46,15 @@ export class CompanyService {
         }
       }
 
-      if (createCompanyDto.companyDocuments) {
-        for (const store of createCompanyDto.companyDocuments) {
+      if (createCompanyDto.documents) {
+        for (const document of createCompanyDto.documents) {
           const companyDocument = new CompanyDocument();
           companyDocument.company = company;
-          this.companyDocumentRepositery.merge(companyDocument, store);
+          this.companyDocumentRepositery.merge(companyDocument, document);
           await this.companyDocumentRepositery.save(companyDocument);
         }
       }
-      await this.companyRepositery.save(company);
     } catch (error) {
-      console.log(
-        '🚀 ~ file: company.service.ts ~ line 68 ~ CompanyService ~ saveCompany ~ error',
-        error,
-      );
       throw new Error(`${error.message}`);
     }
   }

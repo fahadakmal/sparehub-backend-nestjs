@@ -57,8 +57,6 @@ export class CompanyStore {
   storePhone: string;
 
   @Column({ length: 50, nullable: true })
-  storeEmail: string;
-
   @Column({ nullable: false })
   saveAsDraft: boolean;
 
