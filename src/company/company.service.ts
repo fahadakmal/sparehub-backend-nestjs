@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
@@ -55,7 +55,7 @@ export class CompanyService {
         }
       }
     } catch (error) {
-      throw new Error(`${error.message}`);
+      throw new InternalServerErrorException();
     }
   }
 }
