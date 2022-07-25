@@ -5,8 +5,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -47,8 +46,7 @@ export class User {
   @Column({ length: 10, default: 'disabled' })
   status: string;
 
-  @OneToOne((_type) => Company)
-  @JoinColumn()
+  @ManyToOne((_type) => Company, (company) => company.users)
   company: Company;
 
   @CreateDateColumn()
