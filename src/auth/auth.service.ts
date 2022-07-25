@@ -42,8 +42,10 @@ export class AuthService {
   }
 
   async updateUserForCompanny(user: User, company: Company) {
-    const userObj = new User();
-    this.userRepositery.merge(userObj, { ...user, company });
+    const userObj = this.userRepositery.create({
+      ...user,
+      company: company,
+    });
     await this.userRepositery.save(userObj);
   }
 
@@ -55,5 +57,16 @@ export class AuthService {
       throw new NotFoundException(`User with username ${username} not found`);
     }
     return user;
+  }
+
+  async getUserCompanyId(user: User) {
+    const userObj = await this.userRepositery.findOne({
+      where: { id: user.id },
+      loadRelationIds: true,
+    });
+
+    const { company } = userObj;
+
+    return company;
   }
 }
