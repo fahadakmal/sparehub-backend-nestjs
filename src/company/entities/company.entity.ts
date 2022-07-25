@@ -16,6 +16,7 @@ import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
 import { Exclude } from 'class-transformer';
 import { Country } from 'src/common/modules/address/entities/country.entity';
+import { User } from 'src/auth/user.entity';
 
 @Entity()
 export class Company {
@@ -104,4 +105,7 @@ export class Company {
 
   @OneToMany((_type) => CompanyStore, (store) => store.company, { eager: true })
   stores: CompanyStore[];
+
+  @OneToMany((_type) => User, (user) => user.company)
+  users: User[];
 }

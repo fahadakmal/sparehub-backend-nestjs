@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
@@ -25,13 +30,15 @@ export class CompanyService {
 
   async saveCompany(user: User, createCompanyDto: CreateCompanyDto) {
     try {
-      const company = new Company();
-      this.companyRepositery.merge(company, createCompanyDto.businessInfo);
+      const company = this.companyRepositery.create({
+        ...createCompanyDto.businessInfo,
+      });
       await this.companyRepositery.save(company);
       await this.authService.updateUserForCompanny(user, company);
       if (createCompanyDto.bank) {
-        const companyBank = new CompanyBank();
-        this.companyBankRepositery.merge(companyBank, createCompanyDto.bank);
+        const companyBank = this.companyBankRepositery.create({
+          ...createCompanyDto.bank,
+        });
         await this.companyBankRepositery.save(companyBank);
         company.bank = companyBank;
         await this.companyRepositery.save(company);
@@ -39,18 +46,20 @@ export class CompanyService {
 
       if (createCompanyDto.stores) {
         for (const store of createCompanyDto.stores) {
-          const companyStore = new CompanyStore();
-          companyStore.company = company;
-          this.companyStoreRepositery.merge(companyStore, store);
+          const companyStore = this.companyStoreRepositery.create({
+            ...store,
+            company: company,
+          });
           await this.companyStoreRepositery.save(companyStore);
         }
       }
 
       if (createCompanyDto.documents) {
         for (const document of createCompanyDto.documents) {
-          const companyDocument = new CompanyDocument();
-          companyDocument.company = company;
-          this.companyDocumentRepositery.merge(companyDocument, document);
+          const companyDocument = this.companyStoreRepositery.create({
+            ...document,
+            company: company,
+          });
           await this.companyDocumentRepositery.save(companyDocument);
         }
       }
@@ -60,6 +69,17 @@ export class CompanyService {
   }
 
   async getCompany(user: User) {
-    return this.companyRepositery.findOneBy({ id: user.company.id });
+    try {
+      const companyId: any = await this.authService.getUserCompanyId(user);
+      const company = await this.companyRepositery.findOne({
+        where: { id: companyId },
+      });
+      if (!company) {
+        throw new NotFoundException();
+      }
+      return company;
+    } catch (error) {
+      throw new BadRequestException('');
+    }
   }
 }
