@@ -6,9 +6,11 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OnSignUpDto } from './dto/auth-credentials.dto';
+import { OnSignUpDto } from './dto/on-signup.dto';
 import { User } from './user.entity';
 import { Company } from 'src/company/entities/company.entity';
+import { OnLoginDto } from './dto/on-login.dto';
+import { LoginType } from 'src/common/constants/enums/loginType.enum';
 
 @Injectable()
 export class AuthService {
@@ -49,12 +51,12 @@ export class AuthService {
     await this.userRepositery.save(userObj);
   }
 
-  async getUser(username: string) {
-    const user = await this.userRepositery.findOneBy({
-      awsUserName: username,
-    });
+  async getUser(findUserObj) {
+    const user = await this.userRepositery.findOneBy(findUserObj);
     if (!user) {
-      throw new NotFoundException(`User with username ${username} not found`);
+      throw new NotFoundException(
+        `User with  ${JSON.stringify(findUserObj)} not found`,
+      );
     }
     return user;
   }
@@ -68,5 +70,20 @@ export class AuthService {
     const { company } = userObj;
 
     return company;
+  }
+
+  async onLogin(onLoginDto: OnLoginDto) {
+    const { loginType, loginSuccess, attribute } = onLoginDto;
+    const user: User =
+      loginType === LoginType.EMAIL
+        ? await this.getUser({ email: attribute })
+        : await this.getUser({ phoneNo: attribute });
+    if (loginSuccess) {
+      user.failedLoginAttempts = 0;
+      user.lastLogin = new Date();
+    } else {
+      user.failedLoginAttempts = user.failedLoginAttempts + 1;
+    }
+    this.userRepositery.save(user);
   }
 }
