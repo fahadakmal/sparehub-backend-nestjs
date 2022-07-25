@@ -1,5 +1,6 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { City } from 'src/common/modules/address/entities/city.entity';
+import { Country } from 'src/common/modules/address/entities/country.entity';
 import { State } from 'src/common/modules/address/entities/state.entity';
 
 export class CreateCompanyBusinessDto {
@@ -35,8 +36,8 @@ export class CreateCompanyBusinessDto {
   zipcode: string;
   @IsNumber()
   state: State;
-  @IsString()
-  country: string;
+  @IsNumber()
+  country: Country;
   @IsBoolean()
   saveAsDraft: boolean;
 }
