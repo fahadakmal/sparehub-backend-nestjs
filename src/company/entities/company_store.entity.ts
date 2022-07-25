@@ -10,6 +10,7 @@ import { City } from 'src/common/modules/address/entities/city.entity';
 import { Company } from './company.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
 import { Exclude } from 'class-transformer';
+import { Country } from 'src/common/modules/address/entities/country.entity';
 
 @Entity()
 export class CompanyStore {
@@ -44,8 +45,10 @@ export class CompanyStore {
   })
   state: State;
 
-  @Column({ length: 2, nullable: true })
-  country: string;
+  @ManyToOne((_type) => Country, (country) => country.companyStores, {
+    eager: true,
+  })
+  country: Country;
 
   @Column({ nullable: true })
   coordinates: string;

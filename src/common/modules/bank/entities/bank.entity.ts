@@ -7,7 +7,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
+import { Country } from '../../address/entities/country.entity';
 
 @Entity()
 export class Bank {
@@ -17,8 +19,10 @@ export class Bank {
   @Column({ length: 100 })
   name: string;
 
-  @Column({ length: 2 })
-  country: string;
+  @ManyToOne((_type) => Country, (country) => country.banks, {
+    eager: true,
+  })
+  country: Country;
 
   @Exclude()
   @Column({ default: true })
