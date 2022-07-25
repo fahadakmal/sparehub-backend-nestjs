@@ -15,6 +15,7 @@ import { CompanyDocument } from './company_document.entity';
 import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
 import { Exclude } from 'class-transformer';
+import { Country } from 'src/common/modules/address/entities/country.entity';
 
 @Entity()
 export class Company {
@@ -73,8 +74,10 @@ export class Company {
   })
   state: State;
 
-  @Column({ length: 2, nullable: true })
-  country: string;
+  @ManyToOne((_type) => Country, (country) => country.companies, {
+    eager: true,
+  })
+  country: Country;
 
   @Column({ length: 10, nullable: true })
   status: string;

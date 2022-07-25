@@ -1,4 +1,6 @@
 import { Exclude } from 'class-transformer';
+import { Company } from 'src/company/entities/company.entity';
+import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
   Entity,
@@ -7,6 +9,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { Bank } from '../../bank/entities/bank.entity';
 import { State } from './state.entity';
 
 @Entity()
@@ -33,4 +36,12 @@ export class Country {
 
   @OneToMany((_type) => State, (state) => state.country)
   states: State[];
+
+  @OneToMany((_type) => Company, (state) => state.country)
+  companies: Company[];
+  @OneToMany((_type) => CompanyStore, (companyStore) => companyStore.country)
+  companyStores: CompanyStore[];
+
+  @OneToMany((_type) => Bank, (bank) => bank.country)
+  banks: CompanyStore[];
 }
