@@ -29,7 +29,9 @@ export class AwsCognitoGuard implements CanActivate {
     try {
       const data = await this.authorizedByCognito(authorizationString);
       if (data.username) {
-        const user = await this.authService.getUser(data.username);
+        const user = await this.authService.getUser({
+          awsUserName: data.username,
+        });
         request.user = user;
         return true;
       }

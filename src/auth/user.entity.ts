@@ -31,7 +31,7 @@ export class User {
   @Column({ nullable: true })
   profilePhoto: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   lastLogin: Date;
 
   @Column({ nullable: true, default: 0 })
