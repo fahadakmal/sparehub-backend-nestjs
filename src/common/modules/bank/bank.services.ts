@@ -9,10 +9,10 @@ export class BankService {
     @InjectRepository(Bank)
     private bankRepositery: Repository<Bank>,
   ) {}
-  async getBanks(country: string): Promise<Bank[]> {
+  async getBanks(countryId: number): Promise<Bank[]> {
     try {
       const banks = await this.bankRepositery.find({
-        where: { country: Like(`%${country}%`), isActive: true },
+        where: { country: { id: countryId } },
       });
       return banks;
     } catch (error) {
