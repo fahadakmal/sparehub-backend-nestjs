@@ -1,6 +1,7 @@
 import { S3 } from 'aws-sdk';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ACCEPT_MIME_TYPES } from './accept-mime-types';
 
 @Injectable()
 export class FileUploadService {
@@ -8,8 +9,7 @@ export class FileUploadService {
   async upload(file) {
     try {
       const { originalname, mimeType } = file;
-      const acceptMimeTypes = ['image/png', 'image/jpeg'];
-      if (acceptMimeTypes.includes(mimeType)) {
+      if (!ACCEPT_MIME_TYPES.includes(mimeType)) {
         throw new BadRequestException();
       }
       const bucketS3 = this.configService.get('S3_BUCKET_NAME');
