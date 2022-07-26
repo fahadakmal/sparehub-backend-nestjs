@@ -7,6 +7,7 @@ import { CompanyModule } from './company/company.module';
 import { BankModule } from './common/modules/bank/bank.module';
 import { AddressModule } from './common/modules/address/address.module';
 import { DocumentTypeModule } from './common/modules/documentType/documentType.module';
+import { FileUploadModule } from './common/modules/fileUpload/file-upload.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DocumentTypeModule } from './common/modules/documentType/documentType.m
     BankModule,
     AddressModule,
     DocumentTypeModule,
+    FileUploadModule,
   ],
   exports: [],
   controllers: [],
