@@ -8,12 +8,17 @@ export class FileUploadService {
   constructor(private configService: ConfigService) {}
   async upload(file) {
     try {
-      const { originalname, mimeType } = file;
-      if (!ACCEPT_MIME_TYPES.includes(mimeType)) {
+      const { originalname, mimetype } = file;
+      if (!ACCEPT_MIME_TYPES.includes(mimetype)) {
         throw new BadRequestException();
       }
+
       const bucketS3 = this.configService.get('S3_BUCKET_NAME');
-      return await this.uploadS3(file.buffer, bucketS3, originalname);
+      return await this.uploadS3(
+        file.buffer,
+        bucketS3,
+        `${Date.now()}${originalname}`,
+      );
     } catch (error) {
       throw new BadRequestException(error);
     }
