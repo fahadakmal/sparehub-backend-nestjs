@@ -2,6 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { OnLoginDto } from './dto/on-login.dto';
 import { OnSignUpDto } from './dto/on-signup.dto';
+import { PreSignUpDto } from './dto/pre-signup.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +15,11 @@ export class AuthController {
 
   @Post('onLogin')
   onLogin(@Body() onLoginDto: OnLoginDto): Promise<void> {
-    return this, this.authService.onLogin(onLoginDto);
+    return this.authService.onLogin(onLoginDto);
+  }
+
+  @Post('preSignUp')
+  preSignUp(@Body() preSignUpDto: PreSignUpDto): Promise<any> {
+    return this.authService.preSignUp(preSignUpDto);
   }
 }
