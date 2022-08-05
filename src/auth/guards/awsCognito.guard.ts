@@ -8,7 +8,7 @@ import axios from 'axios';
 import * as jwkToPem from 'jwk-to-pem';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../user.entity';
+import { User } from '../entities/user.entity';
 import { AuthService } from '../auth.service';
 
 @Injectable()
