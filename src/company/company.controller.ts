@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/entities/user.entity';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dtos/create-company.dto';
 

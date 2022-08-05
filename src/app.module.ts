@@ -8,6 +8,7 @@ import { BankModule } from './common/modules/bank/bank.module';
 import { AddressModule } from './common/modules/address/address.module';
 import { DocumentTypeModule } from './common/modules/documentType/documentType.module';
 import { FileUploadModule } from './common/modules/fileUpload/file-upload.module';
+import { RolePermissionModule } from './role-permission/role-permission.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { FileUploadModule } from './common/modules/fileUpload/file-upload.module
     AddressModule,
     DocumentTypeModule,
     FileUploadModule,
+    RolePermissionModule,
   ],
   exports: [],
   controllers: [],
