@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -11,6 +12,7 @@ import { User } from './user.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { OnLoginDto } from './dto/on-login.dto';
 import { LoginType } from 'src/common/constants/enums/loginType.enum';
+import { PreSignUpDto } from './dto/pre-signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -73,17 +75,34 @@ export class AuthService {
   }
 
   async onLogin(onLoginDto: OnLoginDto) {
-    const { loginType, loginSuccess, attribute } = onLoginDto;
-    const user: User =
-      loginType === LoginType.EMAIL
-        ? await this.getUser({ email: attribute })
-        : await this.getUser({ phoneNo: attribute });
-    if (loginSuccess) {
-      user.failedLoginAttempts = 0;
-      user.lastLogin = new Date();
-    } else {
-      user.failedLoginAttempts = user.failedLoginAttempts + 1;
+    try {
+      const { loginType, loginSuccess, attribute } = onLoginDto;
+      const user: User =
+        loginType === LoginType.EMAIL
+          ? await this.getUser({ email: attribute })
+          : await this.getUser({ phoneNo: attribute });
+      if (loginSuccess) {
+        user.failedLoginAttempts = 0;
+        user.lastLogin = new Date();
+      } else {
+        user.failedLoginAttempts = user.failedLoginAttempts + 1;
+      }
+      await this.userRepositery.save(user);
+    } catch (error) {
+      throw new BadRequestException(error);
     }
-    this.userRepositery.save(user);
+  }
+
+  async preSignUp(preSignUpDto: PreSignUpDto) {
+    const { email, phoneNo } = preSignUpDto;
+    try {
+      const user = await this.userRepositery.findOneBy({ email, phoneNo });
+      if (!user) {
+        throw new NotFoundException('User Not Found');
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
   }
 }
