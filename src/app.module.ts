@@ -8,11 +8,13 @@ import { BankModule } from './common/modules/bank/bank.module';
 import { AddressModule } from './common/modules/address/address.module';
 import { DocumentTypeModule } from './common/modules/documentType/documentType.module';
 import { FileUploadModule } from './common/modules/fileUpload/file-upload.module';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [process.env.ENV_FILE, '.env'],
+      validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
