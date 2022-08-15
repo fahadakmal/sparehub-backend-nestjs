@@ -1,36 +1,44 @@
+import { Exclude } from 'class-transformer';
 import { Role } from 'src/role-permission/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
-export class RolePermission {
+export class UserRole {
+  @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  username: string;
-
-  @Column()
-  role: Role;
-
-  @Column({ type: 'timestamptz' })
+  @Exclude()
+  @Column({ type: 'timestamptz', default: null })
   expiryDate: Date;
 
-  @Column()
-  assignedBy: User;
+  @Exclude()
+  @Column({ default: null })
+  assignedBy: number;
 
-  @Column({ type: 'timestamptz' })
+  @Exclude()
+  @Column({ type: 'timestamptz', default: null })
   assignDate: Date;
 
+  @Exclude()
+  @ManyToOne(() => User, (user) => user.userRoles)
+  user: User;
+
+  @ManyToOne(() => Role, (role) => role.userRoles, { eager: true })
+  role!: Role;
+
+  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
-
+  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

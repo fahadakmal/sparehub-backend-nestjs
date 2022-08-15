@@ -13,12 +13,17 @@ import { Company } from 'src/company/entities/company.entity';
 import { OnLoginDto } from './dto/on-login.dto';
 import { LoginType } from 'src/common/constants/enums/loginType.enum';
 import { PreSignUpDto } from './dto/pre-signup.dto';
+import { UserRole } from './entities/user-role.entity';
+import { RolePermissionService } from 'src/role-permission/role-permission.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepositery: Repository<User>,
+    @InjectRepository(UserRole)
+    private userRoleepositery: Repository<UserRole>,
+    private roleService: RolePermissionService,
   ) {}
 
   async onSignUp(onSignUpDto: OnSignUpDto): Promise<void> {
@@ -34,8 +39,15 @@ export class AuthService {
       userObj['phoneNo'] = phoneNo;
     }
     const user = this.userRepositery.create({ ...userObj });
+    const supersellerRoleawait = await this.roleService.findSuperSellerAdmin();
     try {
-      await this.userRepositery.save(user);
+      const savedUser = await this.userRepositery.save(user);
+      const userRoleEntry = this.userRoleepositery.create({
+        assignedBy: 1,
+        user: savedUser,
+        role: supersellerRoleawait,
+      });
+      this.userRoleepositery.save(userRoleEntry);
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('User already exist');
@@ -87,7 +99,8 @@ export class AuthService {
       } else {
         user.failedLoginAttempts = user.failedLoginAttempts + 1;
       }
-      await this.userRepositery.save(user);
+      const currentUser = this.userRepositery.save(user);
+      return currentUser;
     } catch (error) {
       throw new BadRequestException(error);
     }
