@@ -9,11 +9,13 @@ import { AddressModule } from './common/modules/address/address.module';
 import { DocumentTypeModule } from './common/modules/documentType/documentType.module';
 import { FileUploadModule } from './common/modules/fileUpload/file-upload.module';
 import { RolePermissionModule } from './role-permission/role-permission.module';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env.stage.${process.env.STAGE}`],
+      envFilePath: [process.env.ENV_FILE, '.env'],
+      validationSchema: configValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
