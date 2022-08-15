@@ -1,8 +1,15 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { OnLoginDto } from './dto/on-login.dto';
 import { OnSignUpDto } from './dto/on-signup.dto';
 import { PreSignUpDto } from './dto/pre-signup.dto';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -13,8 +20,9 @@ export class AuthController {
     return this.authService.onSignUp(onSignUpDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('onLogin')
-  onLogin(@Body() onLoginDto: OnLoginDto): Promise<void> {
+  onLogin(@Body() onLoginDto: OnLoginDto): Promise<User> {
     return this.authService.onLogin(onLoginDto);
   }
 

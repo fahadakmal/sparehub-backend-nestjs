@@ -16,7 +16,7 @@ import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
 import { Exclude } from 'class-transformer';
 import { Country } from 'src/common/modules/address/entities/country.entity';
-import { User } from 'src/auth/user.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
 export class Company {

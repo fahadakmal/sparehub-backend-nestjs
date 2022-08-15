@@ -1,4 +1,5 @@
 import { Company } from 'src/company/entities/company.entity';
+import { Role } from 'src/role-permission/entities/role.entity';
 import {
   Column,
   Entity,
@@ -6,7 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
+import { UserRole } from './user-role.entity';
 
 @Entity()
 export class User {
@@ -46,8 +51,11 @@ export class User {
   @Column({ length: 10, default: 'disabled' })
   status: string;
 
-  @ManyToOne((_type) => Company, (company) => company.users)
+  @ManyToOne(() => Company, (company) => company.users)
   company: Company;
+
+  @OneToMany(() => UserRole, (userRole) => userRole.user, { eager: true })
+  userRoles: UserRole[];
 
   @CreateDateColumn()
   createdOn: Date;
