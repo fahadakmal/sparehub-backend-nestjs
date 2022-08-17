@@ -10,6 +10,7 @@ import { DocumentTypeModule } from './common/modules/documentType/documentType.m
 import { FileUploadModule } from './common/modules/fileUpload/file-upload.module';
 import { RolePermissionModule } from './role-permission/role-permission.module';
 import { configValidationSchema } from './config.schema';
+import { ProductCategoryModule } from './product_category/product_category.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { configValidationSchema } from './config.schema';
     DocumentTypeModule,
     FileUploadModule,
     RolePermissionModule,
+    ProductCategoryModule,
   ],
   exports: [],
   controllers: [],
