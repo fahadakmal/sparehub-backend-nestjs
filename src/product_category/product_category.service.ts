@@ -17,7 +17,11 @@ export class ProductCategoryService {
 
   async getProductCategories() {
     try {
-      return this.productCategoryRepo.find();
+      const categories = await this.productCategoryRepo.find();
+      if (!categories) {
+        throw new NotFoundException();
+      }
+      return categories;
     } catch (error) {
       throw new InternalServerErrorException();
     }
