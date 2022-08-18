@@ -6,9 +6,9 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { OnLoginDto } from './dto/on-login.dto';
-import { OnSignUpDto } from './dto/on-signup.dto';
-import { PreSignUpDto } from './dto/pre-signup.dto';
+import { OnLoginDto } from './dto/on_login.dto';
+import { OnSignUpDto } from './dto/on_signup.dto';
+import { PreSignUpDto } from './dto/pre_signup.dto';
 import { User } from './entities/user.entity';
 
 @Controller('auth')

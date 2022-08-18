@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsOptional, ValidateNested } from 'class-validator';
-import { CreateCompanyBankDto } from './creaate-company-bank.dto';
-import { CreateCompanyBusinessDto } from './create-company-business-info.dto';
-import { CreateCompanyDocumentDto } from './create-company-document.dto';
-import { CreateCompanyStoreoDto } from './create-company-store.dto';
+import { CreateCompanyBankDto } from './creaate_company-bank.dto';
+import { CreateCompanyBusinessDto } from './create_company-business-info.dto';
+import { CreateCompanyDocumentDto } from './create_company_document.dto';
+import { CreateCompanyStoreoDto } from './create_company_store.dto';
 
 export class CreateCompanyDto {
   @ValidateNested()

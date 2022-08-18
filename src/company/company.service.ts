@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateCompanyDto } from './dtos/create-company.dto';
+import { CreateCompanyDto } from './dtos/create_company.dto';
 import { Company } from './entities/company.entity';
 import { CompanyBank } from './entities/company_bank.entity';
 import { CompanyDocument } from './entities/company_document.entity';
