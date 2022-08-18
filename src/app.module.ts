@@ -12,7 +12,7 @@ import { RolePermissionModule } from './role-permission/role_permission.module';
 import { configValidationSchema } from './config.schema';
 import { ProductCategoryModule } from './product_category/product_category.module';
 import { BrandModule } from './common/modules/brand/brand.module';
-
+import { CarModule } from './common/modules/car/car.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +44,7 @@ import { BrandModule } from './common/modules/brand/brand.module';
     RolePermissionModule,
     ProductCategoryModule,
     BrandModule,
+    CarModule,
   ],
   exports: [],
   controllers: [],
