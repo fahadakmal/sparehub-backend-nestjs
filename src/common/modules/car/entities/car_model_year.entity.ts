@@ -17,7 +17,7 @@ export class CarModelYear {
   modelYear: number;
 
   @Column({ length: 50 })
-  varinat: string;
+  variant: string;
 
   @Column({ length: 50, default: null })
   region: string;
