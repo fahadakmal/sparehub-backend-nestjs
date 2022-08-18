@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CarMake } from './entities/car_make.entity';
 import { CarModel } from './entities/car_model.entity';
+import { CarModelYear } from './entities/car_model_year.entity';
 
 @Injectable()
 export class CarService {
@@ -15,6 +16,8 @@ export class CarService {
     private carMakeRepositery: Repository<CarMake>,
     @InjectRepository(CarModel)
     private carModelRepositery: Repository<CarModel>,
+    @InjectRepository(CarModelYear)
+    private carVariantRepositery: Repository<CarModelYear>,
   ) {}
 
   async getCarMakers(): Promise<CarMake[]> {
@@ -39,6 +42,20 @@ export class CarService {
         throw new NotFoundException();
       }
       return makerModels;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
+
+  async getModelVariants(modelId: string): Promise<CarModelYear[]> {
+    try {
+      const modelVariants = await this.carVariantRepositery.findBy({
+        model: { id: parseInt(modelId) },
+      });
+      if (!modelVariants) {
+        throw new NotFoundException();
+      }
+      return modelVariants;
     } catch (error) {
       throw new BadRequestException();
     }
