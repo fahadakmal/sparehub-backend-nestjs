@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,7 +29,7 @@ export class CarMake {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => CarModel, (corModel) => corModel.make, { eager: true })
+  @OneToMany(() => CarModel, (corModel) => corModel.make, { eager: false })
   car_models: CarModel[];
 
   @CreateDateColumn()
