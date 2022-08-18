@@ -7,11 +7,11 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { GetUser } from 'src/auth/decorator/get-user.decorator';
+import { GetUser } from 'src/auth/decorator/get_user.decorator';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
 import { User } from 'src/auth/entities/user.entity';
 import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dtos/create-company.dto';
+import { CreateCompanyDto } from './dtos/create_company.dto';
 
 @Controller('company')
 @UseGuards(AwsCognitoGuard)
