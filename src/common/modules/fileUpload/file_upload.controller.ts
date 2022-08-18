@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
-import { FileUploadService } from './file-upload.service';
+import { FileUploadService } from './file_upload.service';
 @Controller('upload')
 @UseGuards(AwsCognitoGuard)
 export class FileUploadController {

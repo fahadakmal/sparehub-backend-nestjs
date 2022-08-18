@@ -7,14 +7,14 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OnSignUpDto } from './dto/on-signup.dto';
+import { OnSignUpDto } from './dto/on_signup.dto';
 import { User } from './entities/user.entity';
 import { Company } from 'src/company/entities/company.entity';
-import { OnLoginDto } from './dto/on-login.dto';
+import { OnLoginDto } from './dto/on_login.dto';
 import { LoginType } from 'src/common/constants/enums/loginType.enum';
-import { PreSignUpDto } from './dto/pre-signup.dto';
-import { UserRole } from './entities/user-role.entity';
-import { RolePermissionService } from 'src/role-permission/role-permission.service';
+import { PreSignUpDto } from './dto/pre_signup.dto';
+import { UserRole } from './entities/user_role.entity';
+import { RolePermissionService } from 'src/role-permission/role_permission.service';
 
 @Injectable()
 export class AuthService {
