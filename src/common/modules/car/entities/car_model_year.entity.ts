@@ -22,7 +22,7 @@ export class CarModelYear {
   @Column({ length: 50, default: null })
   region: string;
 
-  @ManyToOne(() => CarModel, (carModel) => carModel.car_variants, {
+  @ManyToOne((_type) => CarModel, (carModel) => carModel.car_variants, {
     eager: false,
   })
   model: CarModel;
