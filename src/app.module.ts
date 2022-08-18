@@ -13,6 +13,7 @@ import { configValidationSchema } from './config.schema';
 import { ProductCategoryModule } from './product_category/product_category.module';
 import { BrandModule } from './common/modules/brand/brand.module';
 import { CarModule } from './common/modules/car/car.module';
+import { ProductTypeModule } from './common/modules/product_type/product_type.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,6 +46,7 @@ import { CarModule } from './common/modules/car/car.module';
     ProductCategoryModule,
     BrandModule,
     CarModule,
+    ProductTypeModule,
   ],
   exports: [],
   controllers: [],
