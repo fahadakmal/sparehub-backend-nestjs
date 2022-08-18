@@ -11,7 +11,7 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { UserRole } from './user-role.entity';
+import { UserRole } from './user_role.entity';
 
 @Entity()
 export class User {
