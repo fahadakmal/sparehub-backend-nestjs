@@ -11,6 +11,7 @@ import { FileUploadModule } from './common/modules/fileUpload/file-upload.module
 import { RolePermissionModule } from './role-permission/role-permission.module';
 import { configValidationSchema } from './config.schema';
 import { ProductCategoryModule } from './product_category/product_category.module';
+import { BrandModule } from './common/modules/brand/brand.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ProductCategoryModule } from './product_category/product_category.modul
     FileUploadModule,
     RolePermissionModule,
     ProductCategoryModule,
+    BrandModule,
   ],
   exports: [],
   controllers: [],
