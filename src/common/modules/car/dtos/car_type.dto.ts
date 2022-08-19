@@ -1,10 +1,10 @@
 import { Expose } from 'class-transformer';
 
-export class CarVariantDto {
+export class CarTypeDto {
   @Expose()
   id: number;
   @Expose()
-  variantName: string;
+  carTypeName: string;
   @Expose()
-  variantNameAr: string;
+  carTypeNameAr: string;
 }

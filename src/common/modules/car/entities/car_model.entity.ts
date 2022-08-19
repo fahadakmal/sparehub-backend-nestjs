@@ -8,7 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CarMake } from './car_make.entity';
-import { CarModelYear } from './car_model_year.entity';
+import { CarType } from './car_type.entities';
+import { CarVariant } from './car_variant.entity';
 
 @Entity()
 export class CarModel {
@@ -30,13 +31,13 @@ export class CarModel {
   @Column({ length: 50 })
   region: string;
 
-  @ManyToOne(() => CarMake, (carMake) => carMake.car_models, { eager: false })
-  make: CarMake;
+  @ManyToOne(() => CarType, (carType) => carType.carModels, { eager: false })
+  carType: CarType;
 
-  @OneToMany(() => CarModelYear, (corModelYear) => corModelYear.model, {
+  @OneToMany(() => CarVariant, (corModelYear) => corModelYear.model, {
     eager: true,
   })
-  car_variants: CarModelYear[];
+  carVariants: CarVariant[];
 
   @CreateDateColumn()
   createdOn: Date;

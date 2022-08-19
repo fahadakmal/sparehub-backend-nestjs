@@ -5,9 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CarMadeYear } from './entities/car_made_year.entity';
 import { CarMake } from './entities/car_make.entity';
 import { CarModel } from './entities/car_model.entity';
-import { CarModelYear } from './entities/car_model_year.entity';
+import { CarType } from './entities/car_type.entities';
+import { CarVariant } from './entities/car_variant.entity';
 
 @Injectable()
 export class CarService {
@@ -16,8 +18,12 @@ export class CarService {
     private carMakeRepositery: Repository<CarMake>,
     @InjectRepository(CarModel)
     private carModelRepositery: Repository<CarModel>,
-    @InjectRepository(CarModelYear)
-    private carVariantRepositery: Repository<CarModelYear>,
+    @InjectRepository(CarVariant)
+    private carVariantRepositery: Repository<CarVariant>,
+    @InjectRepository(CarType)
+    private carTypeRepositery: Repository<CarType>,
+    @InjectRepository(CarMadeYear)
+    private carMadeYearRepositery: Repository<CarMadeYear>,
   ) {}
 
   async getCarMakers(): Promise<CarMake[]> {
@@ -32,22 +38,37 @@ export class CarService {
     }
   }
 
-  async getMakerModels(makerId: string): Promise<CarModel[]> {
+  async getMakerTypes(makerId: string): Promise<CarType[]> {
     try {
-      const makerModels = await this.carModelRepositery.findBy({
+      const carTypes = await this.carTypeRepositery.findBy({
         isActive: true,
         make: { id: parseInt(makerId) },
       });
-      if (!makerModels) {
+      if (!carTypes) {
         throw new NotFoundException();
       }
-      return makerModels;
+      return carTypes;
     } catch (error) {
       throw new BadRequestException();
     }
   }
 
-  async getModelVariants(modelId: string): Promise<CarModelYear[]> {
+  async getTypeModels(typeId: string): Promise<CarModel[]> {
+    try {
+      const typeModels = await this.carModelRepositery.findBy({
+        isActive: true,
+        carType: { id: parseInt(typeId) },
+      });
+      if (!typeModels) {
+        throw new NotFoundException();
+      }
+      return typeModels;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
+
+  async getModelVariants(modelId: string): Promise<CarVariant[]> {
     try {
       const modelVariants = await this.carVariantRepositery.findBy({
         model: { id: parseInt(modelId) },
@@ -56,6 +77,20 @@ export class CarService {
         throw new NotFoundException();
       }
       return modelVariants;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
+
+  async getVariantMadeYears(variantId: string): Promise<CarMadeYear[]> {
+    try {
+      const variantMadeYears = await this.carMadeYearRepositery.findBy({
+        variant: { id: parseInt(variantId) },
+      });
+      if (!variantMadeYears) {
+        throw new NotFoundException();
+      }
+      return variantMadeYears;
     } catch (error) {
       throw new BadRequestException();
     }

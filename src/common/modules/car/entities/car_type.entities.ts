@@ -2,36 +2,36 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CarMake } from './car_make.entity';
 import { CarModel } from './car_model.entity';
-import { CarType } from './car_type.entities';
+import { CarVariant } from './car_variant.entity';
 
 @Entity()
-export class CarMake {
+export class CarType {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 50 })
-  makeName: string;
+  carTypeName: string;
 
   @Column({ length: 50 })
-  makeNameAr: string;
-
-  @Column({ length: 50, default: null })
-  region: string;
-
-  @Column({ default: null })
-  logo: string;
+  carTypeNameAr: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => CarType, (carType) => carType.make, { eager: true })
-  car_types: CarType[];
+  @ManyToOne(() => CarMake, (carMake) => carMake.car_types, { eager: false })
+  make: CarMake;
+
+  @OneToMany(() => CarModel, (carModel) => carModel.carType, {
+    eager: true,
+  })
+  carModels: CarModel[];
 
   @CreateDateColumn()
   createdOn: Date;
