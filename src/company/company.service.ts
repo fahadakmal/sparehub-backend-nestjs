@@ -81,4 +81,19 @@ export class CompanyService {
       throw new BadRequestException('');
     }
   }
+
+  async getCompanyStores(companyId: string): Promise<CompanyStore[]> {
+    try {
+      const companyStores = await this.companyStoreRepositery.findBy({
+        isActive: true,
+        company: { id: parseInt(companyId) },
+      });
+      if (!companyStores) {
+        throw new NotFoundException();
+      }
+      return companyStores;
+    } catch (error) {
+      throw new BadRequestException();
+    }
+  }
 }
