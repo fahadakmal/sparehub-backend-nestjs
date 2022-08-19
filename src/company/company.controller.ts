@@ -16,7 +16,7 @@ import { CreateCompanyDto } from './dtos/create_company.dto';
 import { CompanyStore } from './entities/company_store.entity';
 
 @Controller('company')
-// @UseGuards(AwsCognitoGuard)
+@UseGuards(AwsCognitoGuard)
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
 
