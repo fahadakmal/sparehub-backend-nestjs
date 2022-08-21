@@ -37,7 +37,7 @@ async function bootstrap() {
       bearerFormat: 'Bearer',
     })
     .addSecurityRequirements('ApiKeyAuth')
-    .addServer(`http://localhost:4000`)
+    .addServer(`http://localhost:` + process.env.PORT)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
