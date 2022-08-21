@@ -37,7 +37,7 @@ async function bootstrap() {
       bearerFormat: 'Bearer',
     })
     .addSecurityRequirements('ApiKeyAuth')
-    .addServer(`http://localhost:` + process.env.PORT)
+    .addServer(`http://localhost:${process.env.PORT}`)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -47,7 +47,7 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(4000);
-  logger.log('Application listening on 4000');
+  await app.listen(process.env.PORT);
+  logger.log(`Application listening on ${process.env.PORT}`);
 }
 bootstrap();
