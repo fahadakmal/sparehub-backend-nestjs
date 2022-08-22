@@ -1,3 +1,4 @@
+import { ProductFitment } from 'src/product/entities/product_fitment.entity';
 import {
   Column,
   CreateDateColumn,
@@ -32,6 +33,13 @@ export class CarType {
     eager: true,
   })
   carModels: CarModel[];
+
+  @OneToMany(
+    (_type) => ProductFitment,
+    (productFitment) => productFitment.carType,
+    { eager: false },
+  )
+  products: ProductFitment[];
 
   @CreateDateColumn()
   createdOn: Date;
