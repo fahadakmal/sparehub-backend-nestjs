@@ -10,7 +10,8 @@ import { DocumentTypeModule } from './common/modules/documentType/documentType.m
 import { FileUploadModule } from './common/modules/fileUpload/file_upload.module';
 import { RolePermissionModule } from './role-permission/role_permission.module';
 import { configValidationSchema } from './config.schema';
-import { ProductCategoryModule } from './product_category/product_category.module';
+import { ProductModule } from './product/product.module';
+import { ProductCategoryModule } from './common/modules/product_category/product_category.module';
 import { BrandModule } from './common/modules/brand/brand.module';
 import { CarModule } from './common/modules/car/car.module';
 import { ProductTypeModule } from './common/modules/product_type/product_type.module';
@@ -43,6 +44,7 @@ import { ProductTypeModule } from './common/modules/product_type/product_type.mo
     DocumentTypeModule,
     FileUploadModule,
     RolePermissionModule,
+    ProductModule,
     ProductCategoryModule,
     BrandModule,
     CarModule,
