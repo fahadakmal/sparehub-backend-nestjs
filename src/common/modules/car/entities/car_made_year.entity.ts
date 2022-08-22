@@ -1,8 +1,10 @@
+import { ProductFitment } from 'src/product/entities/product_fitment.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,6 +22,13 @@ export class CarMadeYear {
     eager: false,
   })
   variant: CarVariant;
+
+  @OneToMany(
+    (_type) => ProductFitment,
+    (productFitment) => productFitment.carMadeYear,
+    { eager: false },
+  )
+  products: ProductFitment[];
 
   @CreateDateColumn()
   createdOn: Date;

@@ -1,7 +1,9 @@
+import { Product } from 'src/product/entities/product.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -49,6 +51,11 @@ export class ProductCategory {
 
   @Column({ nullable: true })
   isActive: boolean;
+
+  @ManyToMany(() => Product, (product) => product.categories, {
+    eager: false,
+  })
+  products: Product[];
 
   @CreateDateColumn()
   createdOn: Date;
