@@ -108,8 +108,13 @@ export class AuthService {
 
   async preSignUp(preSignUpDto: PreSignUpDto) {
     const { email, phoneNo } = preSignUpDto;
+    const query = this.userRepositery.createQueryBuilder('user');
+    query.where(
+      '(LOWER(user.email) LIKE LOWER(:email) OR LOWER(user.phoneNo) LIKE LOWER(:phoneNo))',
+      { email: `%${email}%`, phoneNo: `%${phoneNo}%` },
+    );
     try {
-      const user = await this.userRepositery.findOneBy({ email, phoneNo });
+      const user = await query.getOne();
       if (!user) {
         throw new NotFoundException('User Not Found');
       }
