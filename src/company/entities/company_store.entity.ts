@@ -5,20 +5,19 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { Company } from './company.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
 import { Exclude } from 'class-transformer';
 import { Country } from 'src/common/modules/address/entities/country.entity';
+import { ProductInventory } from 'src/product/entities/product_inventory.entity';
 
 @Entity()
 export class CompanyStore {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne((_type) => Company, (company) => company.stores, { eager: false })
-  company: Company;
 
   @Column()
   storeName: string;
@@ -32,23 +31,8 @@ export class CompanyStore {
   @Column()
   address2: string;
 
-  @ManyToOne((_type) => City, (city) => city.companyStores, {
-    eager: true,
-  })
-  city: City;
-
   @Column({ length: 10, nullable: true })
   zipcode: string;
-
-  @ManyToOne((_type) => State, (state) => state.companyStores, {
-    eager: true,
-  })
-  state: State;
-
-  @ManyToOne((_type) => Country, (country) => country.companyStores, {
-    eager: true,
-  })
-  country: Country;
 
   @Column({ nullable: true })
   coordinates: string;
@@ -65,6 +49,33 @@ export class CompanyStore {
 
   @Column({ default: false })
   isActive: boolean;
+
+  @ManyToOne(() => State, (state) => state.companyStores, {
+    eager: true,
+  })
+  state: State;
+
+  @ManyToOne(() => Country, (country) => country.companyStores, {
+    eager: true,
+  })
+  country: Country;
+
+  @ManyToOne(() => City, (city) => city.companyStores, {
+    eager: true,
+  })
+  city: City;
+
+  @ManyToOne(() => Company, (company) => company.stores, { eager: false })
+  company: Company;
+
+  @OneToMany(
+    () => ProductInventory,
+    (productInventory) => productInventory.store,
+    {
+      eager: false,
+    },
+  )
+  productToInventory: ProductInventory[];
 
   @Exclude()
   @CreateDateColumn()
