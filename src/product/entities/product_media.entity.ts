@@ -22,7 +22,7 @@ export class ProductMedia {
   @Column({ default: null })
   imageData: string;
 
-  @Column({ length: 200, default: null })
+  @Column({ length: 200 })
   imagePath: string;
 
   @Column({ length: 50, default: null })
@@ -30,9 +30,6 @@ export class ProductMedia {
 
   @Column({ default: null })
   sortOrder: number;
-
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
 
   @ManyToOne(() => Product, (product) => product.mediaFiles, {
     eager: false,

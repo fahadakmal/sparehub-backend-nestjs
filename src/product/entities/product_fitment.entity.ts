@@ -9,7 +9,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  Column,
 } from 'typeorm';
 import { Product } from './product.entity';
 
@@ -17,9 +16,6 @@ import { Product } from './product.entity';
 export class ProductFitment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
 
   @ManyToOne(() => Product, (product) => product.fitments, {
     eager: false,

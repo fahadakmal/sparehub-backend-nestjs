@@ -8,7 +8,7 @@ import { CreateProductMediaDto } from './create_product_media.dto';
 export class CreateProductDto {
   @ValidateNested()
   @Type(() => CreateProductBasicDetailDto)
-  basicDetail: CreateProductBasicDetailDto;
+  productBasicDetail: CreateProductBasicDetailDto;
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreateProductInventoryDto)

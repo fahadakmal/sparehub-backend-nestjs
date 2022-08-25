@@ -24,5 +24,6 @@ import { User } from 'src/auth/entities/user.entity';
   ],
   controllers: [CompanyController],
   providers: [CompanyService],
+  exports: [CompanyService],
 })
 export class CompanyModule {}
