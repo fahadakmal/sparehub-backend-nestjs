@@ -27,20 +27,18 @@ export class ProductService {
   async createProduct(
     createProductDto: CreateProductDto,
     user: User,
-  ): Promise<Product> {
+  ): Promise<void> {
     try {
+      const { inventory, fitments, mediaFiles, ...rest } = createProductDto;
       const company = await this.companyService.getCompany(user);
       const product = this.productRepositery.create({
-        ...createProductDto.productBasicDetail,
+        ...rest,
         company,
       });
       await this.productRepositery.save(product);
 
-      if (
-        isArray(createProductDto.fitments) &&
-        createProductDto.fitments.length > 0
-      ) {
-        for (const fitment of createProductDto.fitments) {
+      if (isArray(fitments) && fitments.length > 0) {
+        for (const fitment of fitments) {
           const productFitment = this.productFitmentRepositery.create({
             ...fitment,
             product: product,
@@ -49,33 +47,26 @@ export class ProductService {
           await this.productFitmentRepositery.save(productFitment);
         }
       }
-      if (
-        isArray(createProductDto.inventory) &&
-        createProductDto.inventory.length > 0
-      ) {
-        for (const inventory of createProductDto.inventory) {
+      if (isArray(inventory) && inventory.length > 0) {
+        for (const singleInventory of inventory) {
           const productInventory = this.productInventoryRepositery.create({
-            ...inventory,
+            ...singleInventory,
             product: product,
           });
 
           await this.productInventoryRepositery.save(productInventory);
         }
       }
-      if (
-        isArray(createProductDto.mediaFiles) &&
-        createProductDto.mediaFiles.length > 0
-      ) {
-        for (const mediaFiles of createProductDto.mediaFiles) {
+      if (isArray(mediaFiles) && mediaFiles.length > 0) {
+        for (const mediaFile of mediaFiles) {
           const productMedia = this.productMediaRepositery.create({
-            ...mediaFiles,
+            ...mediaFile,
             product: product,
           });
 
           await this.productMediaRepositery.save(productMedia);
         }
       }
-      return product;
     } catch (error) {
       throw new InternalServerErrorException();
     }

@@ -14,7 +14,7 @@ export class ProductController {
   createProduct(
     @GetUser() user: User,
     @Body() createProductDto: CreateProductDto,
-  ): Promise<Product> {
+  ): Promise<void> {
     return this.productService.createProduct(createProductDto, user);
   }
 }
