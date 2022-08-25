@@ -17,9 +17,6 @@ export class ProductInventory {
   @Column()
   quantity: number;
 
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
-
   @ManyToOne(() => CompanyStore, (store) => store.productToInventory, {
     eager: false,
   })

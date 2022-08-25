@@ -12,9 +12,10 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ProductFitment } from './product_fitment.entity';
-import { ProductMedia } from './product_image.entity';
+import { ProductMedia } from './product_media.entity';
 import { ProductInventory } from './product_inventory.entity';
 
 @Entity()
@@ -33,6 +34,9 @@ export class Product {
 
   @Column({ default: null })
   description: string;
+
+  @Column({ default: null })
+  descriptionAr: string;
 
   @Column({ default: null })
   _vendorId: number;
@@ -98,8 +102,7 @@ export class Product {
   attd3: number;
   @Column({ default: null })
   attd4: number;
-  @Column({ length: 50, default: null })
-  country: string;
+
   @Column({ length: 100, default: null })
   style: string;
   @Column({ default: null })
@@ -107,7 +110,7 @@ export class Product {
 
   @Column({ default: false })
   isInStock: bool;
-  @Column({ length: 10, default: 'unPublished' })
+  @Column({ length: 50, nullable: false })
   status: string;
 
   @Column({ default: null })
@@ -122,13 +125,13 @@ export class Product {
   barcode: string;
   @Column({ default: false })
   sellEvenOutStock: bool;
-  @Column({ default: null })
+  @Column({ default: 0 })
   totalReviews: number;
-  @Column({ default: null })
+  @Column({ default: 0 })
   avgRating: number;
 
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
+  @Column({ length: 50, default: null })
+  country: string;
 
   @OneToMany(() => ProductMedia, (productMedia) => productMedia.product, {
     eager: true,
@@ -159,13 +162,10 @@ export class Product {
   )
   productToInventory: ProductInventory[];
 
-  @ManyToMany(
-    () => ProductCategory,
-    (productCategory) => productCategory.products,
-    {
-      eager: false,
-    },
-  )
+  @ManyToMany(() => ProductCategory, {
+    eager: false,
+  })
+  @JoinTable()
   categories: ProductCategory[];
 
   @OneToMany(() => ProductFitment, (productFitment) => productFitment.product, {

@@ -21,10 +21,10 @@ export class User {
   @Column({ unique: true, length: 50 })
   awsUserName: string;
 
-  @Column({ unique: true, length: 50, nullable: true })
+  @Column({ unique: true, length: 50 })
   email: string;
 
-  @Column({ unique: true, length: 15, nullable: true })
+  @Column({ unique: true, length: 15 })
   phoneNo: string;
 
   @Column({ length: 50, nullable: true })
