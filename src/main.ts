@@ -10,6 +10,7 @@ const API_VERSION = '1';
 async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.setGlobalPrefix('/api');
 
   /** Use URI versioning

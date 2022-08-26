@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/create_product.dto';
@@ -15,12 +20,6 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepositery: Repository<Product>,
-    @InjectRepository(ProductFitment)
-    private productFitmentRepositery: Repository<ProductFitment>,
-    @InjectRepository(ProductMedia)
-    private productMediaRepositery: Repository<ProductMedia>,
-    @InjectRepository(ProductInventory)
-    private productInventoryRepositery: Repository<ProductInventory>,
     private companyService: CompanyService,
   ) {}
 
@@ -29,46 +28,37 @@ export class ProductService {
     user: User,
   ): Promise<void> {
     try {
-      const { inventory, fitments, mediaFiles, ...rest } = createProductDto;
       const company = await this.companyService.getCompany(user);
       const product = this.productRepositery.create({
-        ...rest,
+        ...createProductDto,
         company,
       });
       await this.productRepositery.save(product);
-
-      if (isArray(fitments) && fitments.length > 0) {
-        for (const fitment of fitments) {
-          const productFitment = this.productFitmentRepositery.create({
-            ...fitment,
-            product: product,
-          });
-
-          await this.productFitmentRepositery.save(productFitment);
-        }
-      }
-      if (isArray(inventory) && inventory.length > 0) {
-        for (const singleInventory of inventory) {
-          const productInventory = this.productInventoryRepositery.create({
-            ...singleInventory,
-            product: product,
-          });
-
-          await this.productInventoryRepositery.save(productInventory);
-        }
-      }
-      if (isArray(mediaFiles) && mediaFiles.length > 0) {
-        for (const mediaFile of mediaFiles) {
-          const productMedia = this.productMediaRepositery.create({
-            ...mediaFile,
-            product: product,
-          });
-
-          await this.productMediaRepositery.save(productMedia);
-        }
-      }
     } catch (error) {
       throw new InternalServerErrorException();
+    }
+  }
+
+  async getProduct(productId: string): Promise<Product> {
+    try {
+      const query = this.productRepositery.createQueryBuilder('product');
+      query.where('(product.id  = (:productId))', {
+        productId: parseInt(productId),
+      });
+      query.leftJoinAndSelect('product.fitments', 'product_fitments');
+      query.leftJoinAndSelect(
+        'product.productToInventory',
+        'productToInventory',
+      );
+      query.leftJoinAndSelect('product.mediaFiles', 'product_media');
+
+      const product = await query.getOne();
+      if (!product) {
+        throw new NotFoundException();
+      }
+      return product;
+    } catch (error) {
+      throw new BadRequestException();
     }
   }
 }

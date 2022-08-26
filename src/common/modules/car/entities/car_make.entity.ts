@@ -31,7 +31,7 @@ export class CarMake {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => CarType, (carType) => carType.make, { eager: true })
+  @OneToMany(() => CarType, (carType) => carType.make, { eager: false })
   car_types: CarType[];
   @OneToMany(
     (_type) => ProductFitment,

@@ -31,7 +31,7 @@ export class CarVariant {
   model: CarModel;
 
   @OneToMany(() => CarMadeYear, (carMadeYear) => carMadeYear.variant, {
-    eager: true,
+    eager: false,
   })
   variantYears: CarMadeYear[];
 
