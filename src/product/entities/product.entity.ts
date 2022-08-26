@@ -13,6 +13,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  RelationId,
 } from 'typeorm';
 import { ProductFitment } from './product_fitment.entity';
 import { ProductMedia } from './product_media.entity';
@@ -134,7 +135,8 @@ export class Product {
   country: string;
 
   @OneToMany(() => ProductMedia, (productMedia) => productMedia.product, {
-    eager: true,
+    eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   mediaFiles: ProductMedia[];
 
@@ -143,10 +145,16 @@ export class Product {
   })
   brand: Brand;
 
+  @RelationId((product: Product) => product.brand)
+  brandId: number;
+
   @ManyToOne(() => ProductType, (productType) => productType.products, {
     eager: false,
   })
   type: ProductType;
+
+  @RelationId((product: Product) => product.type)
+  typeId: number;
 
   @ManyToOne(() => Company, (company) => company.products, {
     eager: false,
@@ -158,18 +166,24 @@ export class Product {
     (productInventory) => productInventory.product,
     {
       eager: false,
+      cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
     },
   )
   productToInventory: ProductInventory[];
 
   @ManyToMany(() => ProductCategory, {
     eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   @JoinTable()
   categories: ProductCategory[];
 
+  @RelationId((product: Product) => product.categories)
+  categoryIds: number[];
+
   @OneToMany(() => ProductFitment, (productFitment) => productFitment.product, {
     eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   fitments: ProductFitment[];
 

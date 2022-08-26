@@ -158,7 +158,7 @@ export class SeederService {
       }
 
       //seed brand in db
-      const brands = await this.bankRepositery.find();
+      const brands = await this.brandRepositery.find();
 
       const brand = this.brandRepositery.create({
         brandName: 'Mopar',

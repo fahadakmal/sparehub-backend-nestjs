@@ -51,9 +51,6 @@ export class CreateProductDto {
   @IsString()
   barcode: string;
 
-  @IsNumber()
-  company: Company;
-
   @IsArray()
   categories: ProductCategory[];
   @ValidateNested({ each: true })

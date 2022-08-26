@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator/get_user.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
@@ -16,5 +16,10 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
   ): Promise<void> {
     return this.productService.createProduct(createProductDto, user);
+  }
+
+  @Get('/:productId')
+  getProduct(@Param('productId') productId: string): Promise<Product> {
+    return this.productService.getProduct(productId);
   }
 }
