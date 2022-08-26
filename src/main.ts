@@ -24,6 +24,15 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
+  // app.enableCors({
+  //   origin: [
+  //         'http://localhost:3000',
+  //         'http://15.185.195.73:3000/',
+  //         'https://15.185.195.73:3000/',
+  //       ],
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   credentials: true,
+  // });
   app.use(helmet());
   const config = new DocumentBuilder()
     .setTitle('Sparehub API')
