@@ -30,7 +30,7 @@ export class CarType {
   make: CarMake;
 
   @OneToMany(() => CarModel, (carModel) => carModel.carType, {
-    eager: true,
+    eager: false,
   })
   carModels: CarModel[];
 

@@ -158,7 +158,7 @@ export class SeederService {
       }
 
       //seed brand in db
-      const brands = await this.bankRepositery.find();
+      const brands = await this.brandRepositery.find();
 
       const brand = this.brandRepositery.create({
         brandName: 'Mopar',
@@ -252,109 +252,108 @@ export class SeederService {
       //seed product inventory
       //seed product media
     } catch (error) {
-      console.log(
-        '🚀 ~ file: seeder.service.ts ~ line 205 ~ SeederService ~ seed ~ error',
-        error,
-      );
       throw error;
     }
   }
 
   async createRolesAndPermissions() {
-    const permission1 = this.permissionRepositery.create({
-      permissionName: 'Add Sparehub Admin',
-      description: 'Can add, edit, remove Sparehub admins',
-      module: 'SPAREHUB',
-    });
+    try {
+      const permission1 = this.permissionRepositery.create({
+        permissionName: 'Add Sparehub Admin',
+        description: 'Can add, edit, remove Sparehub admins',
+        module: 'SPAREHUB',
+      });
 
-    const permission2 = new Permission();
-    permission2.permissionName = 'Add Seller Admins';
-    permission2.description = 'Update seller profile. Add users';
-    permission2.module = 'SPAREHUB';
+      const permission2 = new Permission();
+      permission2.permissionName = 'Add Seller Admins';
+      permission2.description = 'Update seller profile. Add users';
+      permission2.module = 'SPAREHUB';
 
-    const permission3 = new Permission();
-    permission3.permissionName = 'Add Products';
-    permission3.description = 'Add, edit products';
-    permission3.module = 'SPAREHUB';
-    const permission4 = new Permission();
-    permission4.permissionName = 'Publish Products';
-    permission4.description = 'Publish, unpublish products';
-    permission4.module = 'SPAREHUB';
-    const permission5 = new Permission();
-    permission5.permissionName = 'Orders View';
-    permission5.description = 'Order listing and view details';
-    permission5.module = 'SPAREHUB';
-    const permission6 = new Permission();
-    permission6.permissionName = 'Order package';
-    permission6.description = 'Change order status, cancel, package, deliver';
-    permission6.module = 'SPAREHUB';
-    const permission7 = new Permission();
-    permission7.permissionName = 'Reviews Reply';
-    permission7.description = 'View and reply against reviews and questions';
-    permission7.module = 'SPAREHUB';
-    const permission8 = new Permission();
-    permission8.permissionName = 'Review Delete';
-    permission8.description = 'Review delete';
-    permission8.module = 'SPAREHUB';
-    const permissions = await this.permissionRepositery.find();
+      const permission3 = new Permission();
+      permission3.permissionName = 'Add Products';
+      permission3.description = 'Add, edit products';
+      permission3.module = 'SPAREHUB';
+      const permission4 = new Permission();
+      permission4.permissionName = 'Publish Products';
+      permission4.description = 'Publish, unpublish products';
+      permission4.module = 'SPAREHUB';
+      const permission5 = new Permission();
+      permission5.permissionName = 'Orders View';
+      permission5.description = 'Order listing and view details';
+      permission5.module = 'SPAREHUB';
+      const permission6 = new Permission();
+      permission6.permissionName = 'Order package';
+      permission6.description = 'Change order status, cancel, package, deliver';
+      permission6.module = 'SPAREHUB';
+      const permission7 = new Permission();
+      permission7.permissionName = 'Reviews Reply';
+      permission7.description = 'View and reply against reviews and questions';
+      permission7.module = 'SPAREHUB';
+      const permission8 = new Permission();
+      permission8.permissionName = 'Review Delete';
+      permission8.description = 'Review delete';
+      permission8.module = 'SPAREHUB';
 
-    if (!permissions.length) {
-      await this.permissionRepositery.save([
+      const role = new Role();
+      role.roleName = 'Sparehub Admin';
+      role.roleDescription = 'Seller ';
+      role.permissions = [permission1];
+      role.module = 'SPAREHUB';
+
+      const role1 = new Role();
+      role1.roleName = 'Seller Admin';
+      role1.module = 'SPAREHUB';
+      role1.permissions = [permission2];
+
+      const role2 = new Role();
+      role2.roleName = 'Product Catalog';
+      role2.module = 'SPAREHUB';
+      role2.permissions = [permission3, permission4];
+
+      const role3 = new Role();
+      role3.roleName = 'Order Processor';
+      role3.module = 'SPAREHUB';
+      role3.permissions = [permission5, permission6];
+
+      const role4 = new Role();
+      role4.roleName = 'Review Mgr';
+      role4.module = 'SPAREHUB';
+      role4.permissions = [permission7, permission8];
+
+      const role5 = new Role();
+      role5.roleName = 'Seller Super Admin';
+      role5.module = 'SPAREHUB';
+      role5.permissions = [
+        permission1,
+        permission2,
+        permission3,
+        permission4,
+        permission5,
         permission6,
         permission7,
         permission8,
-        permission5,
-        permission4,
-        permission3,
-        permission2,
-        permission1,
-      ]);
-    }
+      ];
+      const roles = await this.roleRepositery.find();
 
-    const role = new Role();
-    role.roleName = 'Sparehub Admin';
-    role.roleDescription = 'Seller ';
-    role.permissions = [permission1];
-    role.module = 'SPAREHUB';
-
-    const role1 = new Role();
-    role1.roleName = 'Seller Admin';
-    role1.module = 'SPAREHUB';
-    role1.permissions = [permission2];
-
-    const role2 = new Role();
-    role2.roleName = 'Product Catalog';
-    role2.module = 'SPAREHUB';
-    role2.permissions = [permission3, permission4];
-
-    const role3 = new Role();
-    role3.roleName = 'Order Processor';
-    role3.module = 'SPAREHUB';
-    role3.permissions = [permission5, permission6];
-
-    const role4 = new Role();
-    role4.roleName = 'Review Mgr';
-    role4.module = 'SPAREHUB';
-    role4.permissions = [permission7, permission8];
-
-    await this.roleRepositery.save(role4);
-
-    const role5 = new Role();
-    role5.roleName = 'Seller Super Admin';
-    role5.module = 'SPAREHUB';
-    role5.permissions = [
-      permission1,
-      permission2,
-      permission3,
-      permission4,
-      permission5,
-      permission6,
-      permission7,
-      permission8,
-    ];
-    const roles = await this.roleRepositery.find();
-    if (!roles.length) {
-      await this.roleRepositery.save([role, role1, role2, role3, role5]);
+      if (!roles.length) {
+        await this.permissionRepositery.save([
+          permission1,
+          permission2,
+          permission3,
+          permission4,
+          permission5,
+          permission6,
+          permission7,
+          permission8,
+        ]);
+        await this.roleRepositery.save(role);
+        await this.roleRepositery.save(role1);
+        await this.roleRepositery.save(role3);
+        await this.roleRepositery.save(role4);
+        await this.roleRepositery.save(role5);
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }

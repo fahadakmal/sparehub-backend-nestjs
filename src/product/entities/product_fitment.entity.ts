@@ -9,7 +9,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  Column,
+  RelationId,
 } from 'typeorm';
 import { Product } from './product.entity';
 
@@ -17,9 +17,6 @@ import { Product } from './product.entity';
 export class ProductFitment {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
 
   @ManyToOne(() => Product, (product) => product.fitments, {
     eager: false,
@@ -30,23 +27,36 @@ export class ProductFitment {
     eager: false,
   })
   carMake: CarMake;
+  @RelationId((productFitment: ProductFitment) => productFitment.carMake)
+  carMakeId: number;
   @ManyToOne(() => CarType, (carType) => carType.products, {
     eager: false,
   })
   carType: Product;
+  @RelationId((productFitment: ProductFitment) => productFitment.carType)
+  carTypeId: number;
   @ManyToOne(() => CarModel, (carModel) => carModel.products, {
     eager: false,
   })
   carModel: CarModel;
 
+  @RelationId((productFitment: ProductFitment) => productFitment.carModel)
+  carModelId: number;
+
   @ManyToOne(() => CarVariant, (carVariant) => carVariant.products, {
     eager: false,
   })
   carVariant: CarVariant;
+
+  @RelationId((productFitment: ProductFitment) => productFitment.carVariant)
+  carVariantId: number;
   @ManyToOne(() => CarMadeYear, (carMadeYear) => carMadeYear.products, {
     eager: false,
   })
   carMadeYear: CarMadeYear;
+
+  @RelationId((productFitment: ProductFitment) => productFitment.carMadeYear)
+  carMadeYearId: number;
 
   @CreateDateColumn()
   createdOn: Date;
