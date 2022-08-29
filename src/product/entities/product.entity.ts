@@ -12,9 +12,11 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany,
+  JoinTable,
+  RelationId,
 } from 'typeorm';
 import { ProductFitment } from './product_fitment.entity';
-import { ProductMedia } from './product_image.entity';
+import { ProductMedia } from './product_media.entity';
 import { ProductInventory } from './product_inventory.entity';
 
 @Entity()
@@ -33,6 +35,9 @@ export class Product {
 
   @Column({ default: null })
   description: string;
+
+  @Column({ default: null })
+  descriptionAr: string;
 
   @Column({ default: null })
   _vendorId: number;
@@ -98,8 +103,7 @@ export class Product {
   attd3: number;
   @Column({ default: null })
   attd4: number;
-  @Column({ length: 50, default: null })
-  country: string;
+
   @Column({ length: 100, default: null })
   style: string;
   @Column({ default: null })
@@ -107,7 +111,7 @@ export class Product {
 
   @Column({ default: false })
   isInStock: bool;
-  @Column({ length: 10, default: 'unPublished' })
+  @Column({ length: 50, nullable: false })
   status: string;
 
   @Column({ default: null })
@@ -122,16 +126,17 @@ export class Product {
   barcode: string;
   @Column({ default: false })
   sellEvenOutStock: bool;
-  @Column({ default: null })
+  @Column({ default: 0 })
   totalReviews: number;
-  @Column({ default: null })
+  @Column({ default: 0 })
   avgRating: number;
 
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
+  @Column({ length: 50, default: null })
+  country: string;
 
   @OneToMany(() => ProductMedia, (productMedia) => productMedia.product, {
-    eager: true,
+    eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   mediaFiles: ProductMedia[];
 
@@ -140,10 +145,16 @@ export class Product {
   })
   brand: Brand;
 
+  @RelationId((product: Product) => product.brand)
+  brandId: number;
+
   @ManyToOne(() => ProductType, (productType) => productType.products, {
     eager: false,
   })
   type: ProductType;
+
+  @RelationId((product: Product) => product.type)
+  typeId: number;
 
   @ManyToOne(() => Company, (company) => company.products, {
     eager: false,
@@ -155,21 +166,24 @@ export class Product {
     (productInventory) => productInventory.product,
     {
       eager: false,
+      cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
     },
   )
   productToInventory: ProductInventory[];
 
-  @ManyToMany(
-    () => ProductCategory,
-    (productCategory) => productCategory.products,
-    {
-      eager: false,
-    },
-  )
+  @ManyToMany(() => ProductCategory, {
+    eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
+  })
+  @JoinTable()
   categories: ProductCategory[];
+
+  @RelationId((product: Product) => product.categories)
+  categoryIds: number[];
 
   @OneToMany(() => ProductFitment, (productFitment) => productFitment.product, {
     eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   fitments: ProductFitment[];
 

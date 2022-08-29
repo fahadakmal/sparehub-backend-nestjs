@@ -52,11 +52,6 @@ export class ProductCategory {
   @Column({ nullable: true })
   isActive: boolean;
 
-  @ManyToMany(() => Product, (product) => product.categories, {
-    eager: false,
-  })
-  products: Product[];
-
   @CreateDateColumn()
   createdOn: Date;
 
