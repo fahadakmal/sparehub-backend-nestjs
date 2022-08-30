@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  RelationId,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { Company } from './company.entity';
@@ -43,27 +44,31 @@ export class CompanyStore {
   @Column({ length: 20, nullable: true })
   storePhone: string;
 
-  @Column({ length: 50, nullable: true })
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
-
   @Column({ default: false })
   isActive: boolean;
 
   @ManyToOne(() => State, (state) => state.companyStores, {
-    eager: true,
+    eager: false,
   })
   state: State;
 
+  @RelationId((companyStore: CompanyStore) => companyStore.state)
+  stateId: number;
+
   @ManyToOne(() => Country, (country) => country.companyStores, {
-    eager: true,
+    eager: false,
   })
   country: Country;
 
+  @RelationId((companyStore: CompanyStore) => companyStore.country)
+  countryId: number;
+
   @ManyToOne(() => City, (city) => city.companyStores, {
-    eager: true,
+    eager: false,
   })
   city: City;
+  @RelationId((companyStore: CompanyStore) => companyStore.city)
+  cityId: number;
 
   @ManyToOne(() => Company, (company) => company.stores, { eager: false })
   company: Company;

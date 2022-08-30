@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  RelationId,
 } from 'typeorm';
 import { Bank } from '../../common/modules/bank/entities/bank.entity';
 
@@ -23,17 +24,17 @@ export class CompanyBank {
   @Column({ length: 100, nullable: true })
   iban: string;
 
-  @ManyToOne((_type) => Bank, (bank) => bank.companyBanks, { eager: true })
+  @ManyToOne(() => Bank, (bank) => bank.companyBanks, { eager: false })
   bank: Bank;
+
+  @RelationId((companyBank: CompanyBank) => companyBank.bank)
+  bankId: number;
 
   @Column({ length: 20, nullable: true })
   branchCode: string;
 
   @Column({ default: true })
   status: boolean;
-
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
 
   @Exclude()
   @CreateDateColumn()

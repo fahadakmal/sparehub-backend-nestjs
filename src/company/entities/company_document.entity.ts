@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  RelationId,
 } from 'typeorm';
 import { Company } from './company.entity';
 import { DocumentType } from '../../common/modules/documentType/entities/document_type.entity';
@@ -15,7 +16,7 @@ export class CompanyDocument {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((_type) => Company, (company) => company.documents, {
+  @ManyToOne(() => Company, (company) => company.documents, {
     eager: false,
   })
   company: Company;
@@ -24,7 +25,7 @@ export class CompanyDocument {
   documentPath: string;
 
   @ManyToOne(
-    (_type) => DocumentType,
+    () => DocumentType,
     (documentType) => documentType.companyDocuments,
     {
       eager: false,
@@ -32,11 +33,11 @@ export class CompanyDocument {
   )
   docType: DocumentType;
 
+  @RelationId((companyDocument: CompanyDocument) => companyDocument.docType)
+  docTypeId: number;
+
   @Column({ default: true })
   isActive: boolean;
-
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
 
   @Exclude()
   @CreateDateColumn()
