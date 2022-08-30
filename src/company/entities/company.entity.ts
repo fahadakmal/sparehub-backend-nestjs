@@ -8,13 +8,13 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  RelationId,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { CompanyBank } from './company_bank.entity';
 import { CompanyDocument } from './company_document.entity';
 import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
-import { Exclude } from 'class-transformer';
 import { Country } from 'src/common/modules/address/entities/country.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { Product } from 'src/product/entities/product.entity';
@@ -63,55 +63,66 @@ export class Company {
   @Column({ nullable: true })
   address2: string;
 
-  @ManyToOne((_type) => City, (city) => city.companyStores, {
-    eager: true,
+  @ManyToOne(() => City, (city) => city.companyStores, {
+    eager: false,
   })
   city: City;
+
+  @RelationId((company: Company) => company.city)
+  cityId: number;
 
   @Column({ length: 10, nullable: true })
   zipcode: string;
 
-  @ManyToOne((_type) => State, (state) => state.companyStores, {
-    eager: true,
+  @ManyToOne(() => State, (state) => state.companyStores, {
+    eager: false,
   })
   state: State;
 
-  @ManyToOne((_type) => Country, (country) => country.companies, {
-    eager: true,
+  @RelationId((company: Company) => company.state)
+  stateId: number;
+
+  @ManyToOne(() => Country, (country) => country.companies, {
+    eager: false,
   })
   country: Country;
 
-  @Column({ length: 10, nullable: true })
+  @RelationId((company: Company) => company.country)
+  countryId: number;
+
+  @Column({ length: 50, nullable: false })
   status: string;
 
-  @Column({ nullable: false })
-  saveAsDraft: boolean;
-
-  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 
-  @OneToOne(() => CompanyBank, { eager: true })
+  @OneToOne(() => CompanyBank, {
+    eager: false,
+    cascade: ['insert', 'recover', 'remove', 'soft-remove', 'update'],
+  })
   @JoinColumn()
   bank: CompanyBank;
 
-  @OneToMany((_type) => CompanyDocument, (document) => document.company, {
-    eager: true,
+  @OneToMany(() => CompanyDocument, (document) => document.company, {
+    eager: false,
+    cascade: ['insert', 'recover', 'remove', 'soft-remove', 'update'],
   })
   documents: CompanyDocument[];
 
-  @OneToMany((_type) => CompanyStore, (store) => store.company, { eager: true })
+  @OneToMany(() => CompanyStore, (store) => store.company, {
+    eager: false,
+    cascade: ['insert', 'recover', 'remove', 'soft-remove', 'update'],
+  })
   stores: CompanyStore[];
 
-  @OneToMany((_type) => Product, (product) => product.company, {
+  @OneToMany(() => Product, (product) => product.company, {
     eager: false,
   })
   products: Product[];
 
-  @OneToMany((_type) => User, (user) => user.company)
+  @OneToMany(() => User, (user) => user.company)
   users: User[];
 }
