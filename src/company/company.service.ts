@@ -30,40 +30,12 @@ export class CompanyService {
   async saveCompany(user: User, createCompanyDto: CreateCompanyDto) {
     try {
       const company = this.companyRepositery.create({
-        ...createCompanyDto.businessInfo,
+        ...createCompanyDto,
       });
       await this.companyRepositery.save(company);
       await this.authService.updateUserForCompanny(user, company);
-      if (createCompanyDto.bank) {
-        const companyBank = this.companyBankRepositery.create({
-          ...createCompanyDto.bank,
-        });
-        await this.companyBankRepositery.save(companyBank);
-        company.bank = companyBank;
-        await this.companyRepositery.save(company);
-      }
-
-      if (createCompanyDto.stores) {
-        for (const store of createCompanyDto.stores) {
-          const companyStore = this.companyStoreRepositery.create({
-            ...store,
-            company: company,
-          });
-          await this.companyStoreRepositery.save(companyStore);
-        }
-      }
-
-      if (createCompanyDto.documents) {
-        for (const document of createCompanyDto.documents) {
-          const companyDocument = this.companyStoreRepositery.create({
-            ...document,
-            company: company,
-          });
-          await this.companyDocumentRepositery.save(companyDocument);
-        }
-      }
     } catch (error) {
-      throw new Error(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
@@ -72,13 +44,14 @@ export class CompanyService {
       const companyId: any = await this.authService.getUserCompanyId(user);
       const company = await this.companyRepositery.findOne({
         where: { id: companyId },
+        relations: ['stores', 'bank', 'documents'],
       });
       if (!company) {
         throw new NotFoundException();
       }
       return company;
     } catch (error) {
-      throw new BadRequestException('');
+      throw new BadRequestException(error.message);
     }
   }
 

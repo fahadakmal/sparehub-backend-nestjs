@@ -20,7 +20,7 @@ import { CompanyStore } from './entities/company_store.entity';
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
 
-  @Post('/saveApplication')
+  @Post()
   saveCompany(
     @Body() createCompanyDto: CreateCompanyDto,
     @GetUser() user: User,
