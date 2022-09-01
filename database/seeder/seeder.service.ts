@@ -74,8 +74,13 @@ export class SeederService {
       const countries = await this.countryRepositery.find();
       const country = this.countryRepositery.create({
         countryCode: 'SA',
-        countryName: 'Saudi Arab',
-        countryNameAr: 'Al saudi arab',
+        countryName: 'Saudi Arabia',
+        countryNameAr: 'المملكة العربية السعودية',
+        dialCode: '+966',
+        flag: '🇸🇦',
+        mobilePrefix: '',
+        countryCodeSO3: '',
+        IbanLength: 14,
       });
       if (!countries.length) {
         await this.countryRepositery.save(country);
@@ -85,9 +90,12 @@ export class SeederService {
       const states = await this.stateRepositery.find();
 
       const state = this.stateRepositery.create({
-        stateCode: 'PU',
-        stateName: 'RIYADH',
-        stateNameAr: 'Al-Riyadh',
+        stateCode: 'SA.TB',
+        stateName: 'Tabūk',
+        stateNameAr: 'Al-Ajman',
+        iso: '7',
+        fips: 'SA19',
+        capital: 'Tabuk',
         country,
       });
       if (!states.length) {
@@ -98,9 +106,11 @@ export class SeederService {
 
       //seed city in db
       const city = this.cityRepositery.create({
-        cityName: 'Madinah',
-        cityNameAr: 'Al-Madinah',
+        cityName: 'Al-Wajh',
+        cityNameAr: 'الوجه',
         state,
+        country,
+        stateCode1: 'TBK',
       });
       if (!cities.length) {
         await this.cityRepositery.save(city);
@@ -150,7 +160,8 @@ export class SeederService {
       const banks = await this.bankRepositery.find();
 
       const bank = this.bankRepositery.create({
-        name: 'Meezan Bank',
+        name: 'Al Rajhi Bank',
+        nameAr: 'مصرف الراجحي',
         country,
       });
       if (!banks.length) {
