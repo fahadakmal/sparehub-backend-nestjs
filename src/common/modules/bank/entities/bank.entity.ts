@@ -8,10 +8,11 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Country } from '../../address/entities/country.entity';
 
-@Entity()
+@Entity('bank')
 export class Bank {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,20 +20,19 @@ export class Bank {
   @Column({ length: 100 })
   name: string;
 
-  @ManyToOne((_type) => Country, (country) => country.banks, {
-    eager: true,
-  })
+  @Column({ length: 100 })
+  nameAr: string;
+
+  @ManyToOne(() => Country)
+  @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
-  @Exclude()
   @Column({ default: true })
   isActive: boolean;
 
-  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 

@@ -1,47 +1,63 @@
-import { Exclude } from 'class-transformer';
 import { Company } from 'src/company/entities/company.entity';
 import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  PrimaryColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Bank } from '../../bank/entities/bank.entity';
+import { City } from './city.entity';
 import { State } from './state.entity';
 
-@Entity()
+@Entity('country')
 export class Country {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 50, nullable: true })
-  countryName: string;
-
-  @Column({ length: 2, nullable: true })
+  @PrimaryColumn({ length: 2 })
   countryCode: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
+  countryName: string;
+
+  @Column({ length: 50 })
   countryNameAr: string;
 
-  @Exclude()
+  @Column({ length: 5 })
+  dialCode: string;
+
+  @Column({ length: 5 })
+  mobilePrefix: string;
+
+  @Column({ length: 3 })
+  countryCodeSO3: string;
+
+  @Column()
+  IbanLength: number;
+
+  @Column({ length: 2 })
+  flag: string;
+
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 
-  @OneToMany((_type) => State, (state) => state.country)
-  states: State[];
+  @OneToMany(() => State, (state) => state.country)
+  @JoinColumn()
+  states: State;
 
-  @OneToMany((_type) => Company, (state) => state.country)
+  @OneToMany(() => State, (state) => state.country)
+  @JoinColumn()
+  cities: City;
+
+  @OneToMany(() => Company, (state) => state.country)
   companies: Company[];
-  @OneToMany((_type) => CompanyStore, (companyStore) => companyStore.country)
+  @OneToMany(() => CompanyStore, (companyStore) => companyStore.country)
   companyStores: CompanyStore[];
 
-  @OneToMany((_type) => Bank, (bank) => bank.country)
+  @OneToMany(() => Bank, (bank) => bank.country)
   banks: CompanyStore[];
 }
