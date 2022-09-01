@@ -8,26 +8,34 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
+import { Country } from './country.entity';
 import { State } from './state.entity';
 
-@Entity()
+@Entity('city')
 export class City {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   cityName: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   cityNameAr: string;
 
-  @ManyToOne((_type) => State, (state) => state.cities)
+  @Column({ length: 10 })
+  stateCode1: string;
+
+  @ManyToOne(() => State)
+  @JoinColumn({ name: 'stateCode', referencedColumnName: 'stateCode' })
   state: State;
 
-  @OneToMany((_type) => CompanyStore, (companyStore) => companyStore.city, {
-    eager: false,
-  })
+  @ManyToOne(() => Country)
+  @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
+  country: Country;
+
+  @OneToMany(() => CompanyStore, (companyStore) => companyStore.city)
   companyStores: CompanyStore[];
 
   @Exclude()
