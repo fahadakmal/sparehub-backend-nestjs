@@ -26,10 +26,10 @@ export class AddressService {
     }
   }
 
-  async getStates(countryId: number): Promise<State[]> {
+  async getStates(countryCode: string): Promise<State[]> {
     try {
       const states = await this.stateRepositery.find({
-        where: { country: { id: countryId } },
+        where: { country: { countryCode: countryCode } },
       });
       return states;
     } catch (error) {
@@ -37,10 +37,10 @@ export class AddressService {
     }
   }
 
-  async getCities(stateId: number): Promise<City[]> {
+  async getCities(stateCode: string): Promise<City[]> {
     try {
       const cities = await this.cityRepositery.find({
-        where: { state: { id: stateId } },
+        where: { state: { stateCode: stateCode } },
       });
       return cities;
     } catch (error) {
