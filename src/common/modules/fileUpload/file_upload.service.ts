@@ -10,7 +10,9 @@ export class FileUploadService {
     try {
       const { originalname, mimetype } = file;
       if (!ACCEPT_MIME_TYPES.includes(mimetype)) {
-        throw new BadRequestException();
+        throw new BadRequestException(
+          'Uploaded File Must Be from the Valid Mime Types',
+        );
       }
 
       const bucketS3 = this.configService.get('S3_BUCKET_NAME');
@@ -30,6 +32,7 @@ export class FileUploadService {
       Bucket: bucket,
       Key: String(name),
       Body: file,
+      ACL: 'public-read',
     };
     return new Promise((resolve, reject) => {
       s3.upload(params, (err, data) => {
