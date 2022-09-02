@@ -1,3 +1,4 @@
+import { User } from 'src/auth/entities/user.entity';
 import { Company } from 'src/company/entities/company.entity';
 import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
@@ -52,6 +53,10 @@ export class Country {
   @OneToMany(() => State, (state) => state.country)
   @JoinColumn()
   cities: City;
+
+  @OneToMany(() => User, (user) => user.country)
+  @JoinColumn()
+  users: User;
 
   @OneToMany(() => Company, (state) => state.country)
   companies: Company[];

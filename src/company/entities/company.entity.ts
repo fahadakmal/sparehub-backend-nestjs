@@ -123,6 +123,7 @@ export class Company {
   })
   products: Product[];
 
-  @OneToMany(() => User, (user) => user.company)
-  users: User[];
+  @OneToMany((_type) => User, (user) => user.company)
+  @JoinColumn()
+  users: User;
 }
