@@ -9,6 +9,8 @@ import {
   OneToMany,
   PrimaryColumn,
   JoinColumn,
+  PrimaryColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Bank } from '../../bank/entities/bank.entity';
 import { City } from './city.entity';
@@ -24,6 +26,21 @@ export class Country {
 
   @Column({ length: 50 })
   countryNameAr: string;
+
+  @Column({ length: 5 })
+  dialCode: string;
+
+  @Column({ length: 5 })
+  mobilePrefix: string;
+
+  @Column({ length: 3 })
+  countryCodeSO3: string;
+
+  @Column()
+  IbanLength: number;
+
+  @Column({ length: 2 })
+  flag: string;
 
   @Column({ length: 5 })
   dialCode: string;
