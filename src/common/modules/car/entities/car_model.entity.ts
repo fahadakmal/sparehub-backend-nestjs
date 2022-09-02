@@ -3,48 +3,45 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CarMake } from './car_make.entity';
-import { CarType } from './car_type.entities';
-import { CarVariant } from './car_variant.entity';
 
 @Entity()
 export class CarModel {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @ManyToOne(() => CarMake)
+  @JoinColumn({ name: 'make', referencedColumnName: 'make' })
+  make: CarMake;
+
+  @PrimaryColumn({ length: 50 })
+  model: string;
+
+  @Column({ length: 10 })
+  modelYear: string;
+
+  @Column('jsonb', { nullable: true })
+  variant?: object[];
 
   @Column({ length: 50 })
-  modelName: string;
+  region: string;
 
-  @Column({ length: 50 })
-  modelNameAr: string;
+  @Column('simple-array', { nullable: true })
+  carTypes: string[];
 
-  @Column()
+  @Column({ length: 50, default: null })
+  modelAr: string;
+
+  @Column({ default: null })
   sortOrder: number;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ length: 50 })
-  region: string;
-
-  @ManyToOne(() => CarType, (carType) => carType.carModels, { eager: false })
-  carType: CarType;
-
-  @OneToMany(() => CarVariant, (corModelYear) => corModelYear.model, {
-    eager: false,
-  })
-  carVariants: CarVariant[];
-
-  @OneToMany(
-    (_type) => ProductFitment,
-    (productFitment) => productFitment.carModel,
-    { eager: false },
-  )
+  @OneToMany(() => ProductFitment, (productFitment) => productFitment.model)
   products: ProductFitment[];
 
   @CreateDateColumn()

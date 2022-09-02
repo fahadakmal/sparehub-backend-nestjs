@@ -1,26 +1,23 @@
-import { IsNumber, IsOptional } from 'class-validator';
-import { CarMadeYear } from 'src/common/modules/car/entities/car_made_year.entity';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
-import { CarType } from 'src/common/modules/car/entities/car_type.entities';
-import { CarVariant } from 'src/common/modules/car/entities/car_variant.entity';
 
 export class CreateProductFitmentDto {
   @IsOptional()
   id: number;
 
-  @IsNumber()
-  carMake: CarMake;
+  @IsString()
+  make: CarMake;
 
-  @IsNumber()
-  carType: CarType;
+  @IsArray()
+  carType: string[];
 
-  @IsNumber()
+  @IsString()
   carModel: CarModel;
 
-  @IsNumber()
-  carVariant: CarVariant;
+  @IsString()
+  variant: string;
 
-  @IsNumber()
-  carMadeYear: CarMadeYear;
+  @IsArray()
+  modelYear: number[];
 }
