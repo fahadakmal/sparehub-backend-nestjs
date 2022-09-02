@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/entities/user.entity';
 import { UserRole } from 'src/auth/entities/user_role.entity';
 import { City } from '../../src/common/modules/address/entities/city.entity';
@@ -8,17 +7,11 @@ import { Country } from 'src/common/modules/address/entities/country.entity';
 import { State } from 'src/common/modules/address/entities/state.entity';
 import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 import { Brand } from 'src/common/modules/brand/entities/brand.entity';
-import { CarMadeYear } from 'src/common/modules/car/entities/car_made_year.entity';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
-import { CarType } from 'src/common/modules/car/entities/car_type.entities';
-import { CarVariant } from 'src/common/modules/car/entities/car_variant.entity';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
-import { FileUploadService } from 'src/common/modules/fileUpload/file_upload.service';
 import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
-import { CompanyService } from 'src/company/company.service';
-import { ProductService } from 'src/product/product.service';
 import { Permission } from 'src/role-permission/entities/permission.entity';
 import { Role } from 'src/role-permission/entities/role.entity';
 import { Repository } from 'typeorm';
@@ -44,12 +37,7 @@ export class SeederService {
     private carMakeRepositery: Repository<CarMake>,
     @InjectRepository(CarModel)
     private carModelRepositery: Repository<CarModel>,
-    @InjectRepository(CarVariant)
-    private carVariantRepositery: Repository<CarVariant>,
-    @InjectRepository(CarType)
-    private carTypeRepositery: Repository<CarType>,
-    @InjectRepository(CarMadeYear)
-    private carMadeYearRepositery: Repository<CarMadeYear>,
+
     @InjectRepository(Role)
     private roleRepositery: Repository<Role>,
     @InjectRepository(Permission)
@@ -183,61 +171,43 @@ export class SeederService {
       const carMakes = await this.carMakeRepositery.find();
 
       const carMake = this.carMakeRepositery.create({
-        makeName: 'Toyota',
-        makeNameAr: 'Toyota',
+        make: 'Toyota',
+        makeAr: 'Toyota',
         region: 'Asia',
       });
       if (!carMakes.length) {
         await this.carMakeRepositery.save(carMake);
       }
 
-      //seed car type
-      const carTypes = await this.carTypeRepositery.find();
-
-      const carType = this.carTypeRepositery.create({
-        carTypeName: 'Sedan',
-        carTypeNameAr: 'Sedan',
-        make: carMake,
-      });
-      if (!carTypes.length) {
-        await this.carTypeRepositery.save(carType);
-      }
-
       //seed car model
       const carModels = await this.carModelRepositery.find();
 
+      const variants = [
+        { name: '4Runner-turbo', years: '2010,2020,2021,2022' },
+        { name: '4Runner-1.8', years: '2009,2006,2002,2022' },
+      ];
       const carModel = this.carModelRepositery.create({
-        modelName: 'Corolla',
-        modelNameAr: 'Corolla',
-        region: 'Asia',
+        make: carMake,
+        modelAr: '4Runner',
+        model: '4Runner',
+        variant: variants,
+        carTypes: ['Sedan', 'Coupe'],
         sortOrder: 1,
-        carType,
+        region: 'Asia',
+        modelYear: '2010',
+      });
+
+      const carModel1 = this.carModelRepositery.create({
+        make: carMake,
+        modelAr: '4Runner',
+        model: '4Runner',
+        carTypes: ['Sedan', 'Coupe'],
+        region: 'Asia',
+        modelYear: '2020',
       });
       if (!carModels.length) {
         await this.carModelRepositery.save(carModel);
-      }
-      //seed car variant
-      const carVariants = await this.carVariantRepositery.find();
-
-      const carVriant = this.carVariantRepositery.create({
-        variantName: 'XLI',
-        variantNameAr: 'XLI',
-        model: carModel,
-        region: 'Asia',
-      });
-      if (!carVariants.length) {
-        await this.carVariantRepositery.save(carVriant);
-      }
-
-      //seed car made year
-      const carMadeYears = await this.carMadeYearRepositery.find();
-
-      const carMadeYear = this.carMadeYearRepositery.create({
-        madeYear: '2016',
-        variant: carVriant,
-      });
-      if (!carMadeYears.length) {
-        await this.carMadeYearRepositery.save(carMadeYear);
+        await this.carModelRepositery.save(carModel1);
       }
 
       //seed document type in db
