@@ -45,12 +45,12 @@ export class CarService {
     }
   }
 
-  async getModelVariants(model: string): Promise<CarModel[]> {
+  async getModelVariants(model: string): Promise<CarModel> {
     try {
       const query = this.carModelRepositery.createQueryBuilder('car_model');
       query.where('(car_model.model iLike :model)', { model: model });
       query.select('car_model.variant');
-      const variants = await query.getMany();
+      const variants = await query.getOne();
       if (!variants) {
         throw new NotFoundException();
       }
@@ -59,27 +59,27 @@ export class CarService {
       throw new BadRequestException(error.message);
     }
   }
-  async getModelCarTypes(model: string): Promise<CarModel[]> {
+  async getModelCarTypes(model: string): Promise<CarModel> {
     try {
       const query = this.carModelRepositery.createQueryBuilder('car_model');
       query.where('(car_model.model iLike :model)', { model: model });
       query.select('car_model.carTypes');
-      const variants = await query.getMany();
-      if (!variants) {
+      const carTypes = await query.getOne();
+      if (!carTypes) {
         throw new NotFoundException();
       }
-      return variants;
+      return carTypes;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
-  async getModelYears(model: string): Promise<CarModel[]> {
+  async getModelYears(model: string): Promise<CarModel> {
     try {
       const query = this.carModelRepositery.createQueryBuilder('car_model');
       query.where('(car_model.model iLike :model)', { model: model });
       query.select('car_model.modelYear');
-      const modelYear = await query.getMany();
+      const modelYear = await query.getOne();
       if (!modelYear) {
         throw new NotFoundException();
       }
