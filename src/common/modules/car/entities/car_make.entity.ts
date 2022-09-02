@@ -3,24 +3,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
+  JoinColumn,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CarModel } from './car_model.entity';
-import { CarType } from './car_type.entities';
 
 @Entity()
 export class CarMake {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({ length: 50 })
+  make: string;
 
-  @Column({ length: 50 })
-  makeName: string;
-
-  @Column({ length: 50 })
-  makeNameAr: string;
+  @Column({ length: 50, default: null })
+  makeAr: string;
 
   @Column({ length: 50, default: null })
   region: string;
@@ -31,14 +27,13 @@ export class CarMake {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => CarType, (carType) => carType.make, { eager: false })
-  car_types: CarType[];
-  @OneToMany(
-    (_type) => ProductFitment,
-    (productFitment) => productFitment.carMake,
-    { eager: false },
-  )
-  products: ProductFitment[];
+  @OneToMany(() => CarModel, (model) => model.make)
+  @JoinColumn()
+  models: CarModel;
+
+  @OneToMany(() => ProductFitment, (productFitment) => productFitment.make)
+  @JoinColumn()
+  products: ProductFitment;
 
   @CreateDateColumn()
   createdOn: Date;
