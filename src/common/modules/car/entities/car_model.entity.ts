@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { CarMake } from './car_make.entity';
 
-@Entity()
+@Entity('car_model')
 export class CarModel {
   @ManyToOne(() => CarMake)
   @JoinColumn({ name: 'make', referencedColumnName: 'make' })

@@ -8,21 +8,24 @@ import {
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity()
-export class ProductMedia {
+@Entity('product_image')
+export class ProductImage {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => Product, (product) => product.images)
+  product: Product;
 
   @Column({ length: 50, default: null })
   imageFileName: string;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 20, default: null })
   imageFileExt: string;
 
   @Column({ default: null })
   imageData: string;
 
-  @Column({ length: 200 })
+  @Column({ length: 200, default: null })
   imagePath: string;
 
   @Column({ length: 50, default: null })
@@ -30,11 +33,6 @@ export class ProductMedia {
 
   @Column({ default: null })
   sortOrder: number;
-
-  @ManyToOne(() => Product, (product) => product.mediaFiles, {
-    eager: false,
-  })
-  product: Product;
 
   @CreateDateColumn()
   createdOn: Date;

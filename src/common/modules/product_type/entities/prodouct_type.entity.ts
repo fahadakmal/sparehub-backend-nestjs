@@ -3,12 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('prod_type')
 export class ProductType {
   @PrimaryGeneratedColumn()
   id: number;
@@ -21,6 +22,9 @@ export class ProductType {
 
   @Column()
   sortOrder: number;
+
+  @Column({ default: true })
+  isActive: boolean;
 
   @Column({ length: 500, default: null })
   text1Att: string;
@@ -64,13 +68,9 @@ export class ProductType {
   @Column({ length: 500, default: null })
   listId1Att: string;
 
-  @Column({ default: true })
-  isActive: boolean;
-
-  @OneToMany(() => Product, (product) => product.type, {
-    eager: false,
-  })
-  products: Product[];
+  @OneToMany(() => Product, (product) => product.type)
+  @JoinColumn()
+  products: Product;
 
   @CreateDateColumn()
   createdOn: Date;

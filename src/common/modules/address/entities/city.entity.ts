@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Company } from 'src/company/entities/company.entity';
 import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
@@ -38,11 +38,12 @@ export class City {
   @OneToMany(() => CompanyStore, (companyStore) => companyStore.city)
   companyStores: CompanyStore[];
 
-  @Exclude()
+  @OneToMany(() => Company, (companyStore) => companyStore.city)
+  companies: Company[];
+
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

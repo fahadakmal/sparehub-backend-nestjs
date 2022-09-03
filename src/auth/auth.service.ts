@@ -27,8 +27,15 @@ export class AuthService {
   ) {}
 
   async onSignUp(onSignUpDto: OnSignUpDto): Promise<void> {
-    const { email, phoneNo, awsUserName, firstName, lastName, country } =
-      onSignUpDto;
+    const {
+      email,
+      phoneNo,
+      awsUserName,
+      firstName,
+      lastName,
+      country,
+      language,
+    } = onSignUpDto;
     if (!email && !phoneNo) {
       throw new ConflictException('Email Or mobile  Required');
     }
@@ -39,6 +46,7 @@ export class AuthService {
       firstName: firstName || null,
       lastName: lastName || null,
       country: { countryCode: country },
+      language: language || null,
     });
     const supersellerRoleawait = await this.roleService.findSuperSellerAdmin();
     try {
@@ -48,13 +56,9 @@ export class AuthService {
         user: savedUser,
         role: supersellerRoleawait,
       });
-      this.userRoleepositery.save(userRoleEntry);
+      await this.userRoleepositery.save(userRoleEntry);
     } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException('User already exist');
-      } else {
-        throw new InternalServerErrorException();
-      }
+      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -72,13 +76,25 @@ export class AuthService {
 
   async getUser(findUserObj) {
     try {
-      const user = await this.userRepositery.findOneBy(findUserObj);
+      const query = this.userRepositery.createQueryBuilder('user');
+      if (findUserObj.hasOwnProperty('email')) {
+        query.where('(user.email iLike :email)', findUserObj);
+      } else if (findUserObj.hasOwnProperty('phoneNo')) {
+        query.where('(user.mobile iLike :phoneNo)', findUserObj);
+      } else {
+        query.where('(user.awsUsername iLike :awsUserName)', findUserObj);
+      }
+      query
+        .leftJoinAndSelect('user.userRoles', 'user_role')
+        .leftJoinAndSelect('user_role.role', 'role')
+        .leftJoinAndSelect('role.permissions', 'permission');
+      const user = await query.getMany();
       if (!user) {
         throw new NotFoundException(
           `User with  ${JSON.stringify(findUserObj)} not found`,
         );
       }
-      return user;
+      return user[0];
     } catch (error) {
       throw new NotFoundException(error.message);
     }
@@ -96,6 +112,10 @@ export class AuthService {
         );
       }
       const { company } = userObj;
+
+      if (!company) {
+        throw new NotFoundException(`Company for  ${user.email} not found`);
+      }
 
       return company;
     } catch (error) {
@@ -117,10 +137,12 @@ export class AuthService {
         user.failedLoginAttempts = user.failedLoginAttempts + 1;
       }
       const currentUser = await this.userRepositery.save(user);
-      return {
-        ...currentUser,
-        isOnboardingCompleted: currentUser.isOnboardingCompleted,
-      };
+      if (loginSuccess) {
+        return {
+          ...currentUser,
+          isOnboardingCompleted: currentUser.isOnboardingCompleted,
+        };
+      }
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -2,7 +2,7 @@ import { bool } from 'aws-sdk/clients/signer';
 import { Brand } from 'src/common/modules/brand/entities/brand.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
 import { Company } from 'src/company/entities/company.entity';
-import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
+import { ProdCategory } from 'src/common/modules/product_category/entities/prod_category.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -13,22 +13,24 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  RelationId,
+  JoinColumn,
 } from 'typeorm';
 import { ProductFitment } from './product_fitment.entity';
-import { ProductMedia } from './product_media.entity';
+import { ProductImage } from './product_image.entity';
 import { ProductInventory } from './product_inventory.entity';
+import { Country } from 'src/common/modules/address/entities/country.entity';
 
-@Entity()
+@Entity('product')
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  productName: string;
+  @ManyToOne(() => Company)
+  @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
+  company: Company;
 
-  @Column({ length: 50 })
-  productNameAr: string;
+  @Column({ length: 250 })
+  productName: string;
 
   @Column({ default: null })
   itemCode: string;
@@ -39,6 +41,15 @@ export class Product {
   @Column({ default: null })
   descriptionAr: string;
 
+  @ManyToOne(() => ProductType, (productType) => productType.products)
+  type: ProductType;
+
+  @Column({ default: null })
+  categoryId: number;
+
+  @Column({ default: null })
+  subCategoryId: number;
+
   @Column({ default: null })
   _vendorId: number;
 
@@ -47,25 +58,25 @@ export class Product {
   @Column({ length: 50, default: null })
   uSeqId: string;
 
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   _vendorPrice: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
   _vendorDiscount: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   _purchasePrice: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 3, default: null })
   _purchaseCx: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
   _costCustoms: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   _costPrice: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
   _margin: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   salePrice: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   discount: number;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
   salePriceNet: number;
   @Column({ length: 100, default: null })
   attText1: string;
@@ -104,19 +115,35 @@ export class Product {
   @Column({ default: null })
   attd4: number;
 
+  @ManyToOne(() => Country)
+  @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
+  country: Country;
+
   @Column({ length: 100, default: null })
   style: string;
   @Column({ default: null })
   tags: string;
+
+  @OneToMany(() => ProductImage, (productMedia) => productMedia.product, {
+    eager: false,
+    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
+  })
+  images: ProductImage[];
 
   @Column({ default: false })
   isInStock: bool;
   @Column({ length: 50, nullable: false })
   status: string;
 
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
+
+  @Column({ length: 250 })
+  productNameAr: string;
+
   @Column({ default: null })
   summaryAr: string;
-  @Column({ default: null })
+  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
   totalStock: number;
   @Column({ length: 10, default: null })
   uom: string;
@@ -126,63 +153,38 @@ export class Product {
   barcode: string;
   @Column({ default: false })
   sellEvenOutStock: bool;
+
   @Column({ default: 0 })
   totalReviews: number;
-  @Column({ default: 0 })
+  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
   avgRating: number;
-
-  @Column({ length: 50, default: null })
-  country: string;
-
-  @OneToMany(() => ProductMedia, (productMedia) => productMedia.product, {
-    eager: false,
-    cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
-  })
-  mediaFiles: ProductMedia[];
-
-  @ManyToOne(() => Brand, (brand) => brand.products, {
-    eager: false,
-  })
-  brand: Brand;
-
-  @RelationId((product: Product) => product.brand)
-  brandId: number;
-
-  @ManyToOne(() => ProductType, (productType) => productType.products, {
-    eager: false,
-  })
-  type: ProductType;
-
-  @RelationId((product: Product) => product.type)
-  typeId: number;
-
-  @ManyToOne(() => Company, (company) => company.products, {
-    eager: false,
-  })
-  company: Company;
 
   @OneToMany(
     () => ProductInventory,
     (productInventory) => productInventory.product,
     {
-      eager: false,
       cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
     },
   )
   productToInventory: ProductInventory[];
 
-  @ManyToMany(() => ProductCategory, {
-    eager: false,
+  @ManyToMany(() => ProdCategory, {
     cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
-  @JoinTable()
-  categories: ProductCategory[];
-
-  @RelationId((product: Product) => product.categories)
-  categoryIds: number[];
+  @JoinTable({
+    name: 'product_category',
+    joinColumn: {
+      name: 'productId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'categoryId',
+      referencedColumnName: 'id',
+    },
+  })
+  categories: ProdCategory[];
 
   @OneToMany(() => ProductFitment, (productFitment) => productFitment.product, {
-    eager: false,
     cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   fitments: ProductFitment[];

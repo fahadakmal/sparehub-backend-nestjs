@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { CarModel } from './car_model.entity';
 
-@Entity()
+@Entity('car_make')
 export class CarMake {
   @PrimaryColumn({ length: 50 })
   make: string;

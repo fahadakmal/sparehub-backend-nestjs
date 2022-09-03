@@ -3,13 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class ProductCategory {
+@Entity('prod_category')
+export class ProdCategory {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -49,8 +50,22 @@ export class ProductCategory {
   @Column({ nullable: true })
   sortOrder: number;
 
-  @Column({ nullable: true })
+  @Column({ default: true })
   isActive: boolean;
+
+  @ManyToMany(() => Product)
+  @JoinTable({
+    name: 'product_category',
+    joinColumn: {
+      name: 'categoryId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'productId',
+      referencedColumnName: 'id',
+    },
+  })
+  products: Product[];
 
   @CreateDateColumn()
   createdOn: Date;

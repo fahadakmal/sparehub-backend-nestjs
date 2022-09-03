@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity()
+@Entity('product_fitment')
 export class ProductFitment {
   @PrimaryGeneratedColumn()
   id: number;

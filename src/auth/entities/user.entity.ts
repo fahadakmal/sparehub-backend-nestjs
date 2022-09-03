@@ -47,10 +47,10 @@ export class User {
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, default: null })
   password: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, default: null })
   passwordResetCode: string;
 
   @Column({ type: 'timestamptz', nullable: true })
@@ -69,11 +69,9 @@ export class User {
   @Column({ length: 10, default: 'disabled' })
   status: string;
 
-  @Column({ length: 40, nullable: true })
-  userUid: string;
-
-  @OneToMany(() => UserRole, (userRole) => userRole.user, { eager: true })
-  userRoles: UserRole[];
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  @JoinColumn()
+  userRoles: UserRole;
 
   @CreateDateColumn()
   createdOn: Date;

@@ -27,7 +27,7 @@ import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
 import { Role } from 'src/role-permission/entities/role.entity';
 import { Permission } from 'src/role-permission/entities/permission.entity';
-import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
+import { ProdCategory } from 'src/common/modules/product_category/entities/prod_category.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
 
@@ -64,7 +64,7 @@ import { DocumentType } from 'src/common/modules/documentType/entities/document_
       CarModel,
       Role,
       Permission,
-      ProductCategory,
+      ProdCategory,
       ProductType,
       DocumentType,
     ]),
