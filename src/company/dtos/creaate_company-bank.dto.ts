@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Expose } from 'class-transformer';
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 
 export class CreateCompanyBankDto {
@@ -13,8 +20,10 @@ export class CreateCompanyBankDto {
   @IsOptional()
   @IsString()
   iban: string;
-  @IsNumber()
+  @IsOptional()
+  @IsObject()
   bank: Bank;
   @IsOptional()
+  @IsString()
   branchCode: string;
 }

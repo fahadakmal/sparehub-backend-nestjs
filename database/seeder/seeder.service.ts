@@ -10,7 +10,7 @@ import { Brand } from 'src/common/modules/brand/entities/brand.entity';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
-import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
+import { ProdCategory } from 'src/common/modules/product_category/entities/prod_category.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
 import { Permission } from 'src/role-permission/entities/permission.entity';
 import { Role } from 'src/role-permission/entities/role.entity';
@@ -42,8 +42,8 @@ export class SeederService {
     private roleRepositery: Repository<Role>,
     @InjectRepository(Permission)
     private permissionRepositery: Repository<Permission>,
-    @InjectRepository(ProductCategory)
-    private productCategoryRepo: Repository<ProductCategory>,
+    @InjectRepository(ProdCategory)
+    private prodCategoryRepo: Repository<ProdCategory>,
     @InjectRepository(ProductType)
     private productTypeRepositery: Repository<ProductType>,
     @InjectRepository(DocumentType)
@@ -106,10 +106,10 @@ export class SeederService {
 
       await this.createRolesAndPermissions();
 
-      const productCategories = await this.productCategoryRepo.find();
+      const prodCategories = await this.prodCategoryRepo.find();
 
       //seed product category
-      const productCategory = this.productCategoryRepo.create({
+      const prodCategory = this.prodCategoryRepo.create({
         name: 'Auto Body Parts & Mirrors',
         nameAr: '01-اسم التصنيف',
         description: 'Auto Body Parts & Mirrors',
@@ -124,8 +124,8 @@ export class SeederService {
         sortOrder: 1,
         isActive: true,
       });
-      if (!productCategories.length) {
-        await this.productCategoryRepo.save(productCategory);
+      if (!prodCategories.length) {
+        await this.prodCategoryRepo.save(prodCategory);
       }
 
       // seed product type
@@ -279,31 +279,31 @@ export class SeederService {
       role.roleName = 'Sparehub Admin';
       role.roleDescription = 'Seller ';
       role.permissions = [permission1];
-      role.module = 'SPAREHUB';
+      role.moduleId = 'SPAREHUB';
 
       const role1 = new Role();
       role1.roleName = 'Seller Admin';
-      role1.module = 'SPAREHUB';
+      role1.moduleId = 'SPAREHUB';
       role1.permissions = [permission2];
 
       const role2 = new Role();
       role2.roleName = 'Product Catalog';
-      role2.module = 'SPAREHUB';
+      role2.moduleId = 'SPAREHUB';
       role2.permissions = [permission3, permission4];
 
       const role3 = new Role();
       role3.roleName = 'Order Processor';
-      role3.module = 'SPAREHUB';
+      role3.moduleId = 'SPAREHUB';
       role3.permissions = [permission5, permission6];
 
       const role4 = new Role();
       role4.roleName = 'Review Mgr';
-      role4.module = 'SPAREHUB';
+      role4.moduleId = 'SPAREHUB';
       role4.permissions = [permission7, permission8];
 
       const role5 = new Role();
       role5.roleName = 'Seller Super Admin';
-      role5.module = 'SPAREHUB';
+      role5.moduleId = 'SPAREHUB';
       role5.permissions = [
         permission1,
         permission2,

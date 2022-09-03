@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
 
 export class CreateCompanyDocumentDto {
@@ -8,6 +14,7 @@ export class CreateCompanyDocumentDto {
   @IsString()
   @IsNotEmpty()
   documentPath: string;
-  @IsNumber()
+  @IsOptional()
+  @IsObject()
   docType: DocumentType;
 }

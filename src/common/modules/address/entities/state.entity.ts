@@ -1,9 +1,8 @@
-import { Exclude } from 'class-transformer';
+import { Company } from 'src/company/entities/company.entity';
 import { CompanyStore } from 'src/company/entities/company_store.entity';
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
@@ -42,14 +41,17 @@ export class State {
   @JoinColumn()
   cities: City;
 
-  @OneToMany(() => CompanyStore, (companyStore) => companyStore.state)
-  companyStores: CompanyStore[];
+  @OneToMany(() => Company, (company) => company.state)
+  @JoinColumn()
+  companies: Company;
 
-  @Exclude()
+  @OneToMany(() => CompanyStore, (companyStore) => companyStore.state)
+  @JoinColumn()
+  companyStores: CompanyStore;
+
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

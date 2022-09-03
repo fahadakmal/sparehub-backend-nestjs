@@ -23,4 +23,8 @@ export class OnSignUpDto {
   @IsOptional()
   @IsString()
   lastName: string;
+
+  @IsOptional()
+  @IsString()
+  language: string;
 }

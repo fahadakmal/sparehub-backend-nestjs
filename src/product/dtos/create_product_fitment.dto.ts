@@ -1,19 +1,18 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
-import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
-import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
+import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductFitmentDto {
   @IsOptional()
   id: number;
 
-  @IsString()
-  make: CarMake;
+  @IsObject()
+  make: object;
 
+  @IsOptional()
   @IsArray()
   carType: string[];
 
-  @IsString()
-  carModel: CarModel;
+  @IsObject()
+  model: object;
 
   @IsString()
   variant: string;

@@ -6,11 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  RelationId,
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity()
+@Entity('product_inventory')
 export class ProductInventory {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,17 +17,10 @@ export class ProductInventory {
   @Column()
   quantity: number;
 
-  @ManyToOne(() => CompanyStore, (store) => store.productToInventory, {
-    eager: false,
-  })
+  @ManyToOne(() => CompanyStore, (store) => store.productToInventory)
   store: CompanyStore;
 
-  @RelationId((productInventory: ProductInventory) => productInventory.store)
-  storeId: number;
-
-  @ManyToOne(() => Product, (product) => product.productToInventory, {
-    eager: false,
-  })
+  @ManyToOne(() => Product, (product) => product.productToInventory)
   product: Product;
 
   @CreateDateColumn()

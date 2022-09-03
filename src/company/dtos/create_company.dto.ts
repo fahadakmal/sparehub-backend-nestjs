@@ -1,11 +1,11 @@
-import { Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import {
-  IsNumber,
   ValidateNested,
   IsOptional,
   IsString,
   IsEnum,
   IsNotEmpty,
+  IsObject,
 } from 'class-validator';
 import { CreateCompanyBankDto } from './creaate_company-bank.dto';
 import { CreateCompanyDocumentDto } from './create_company_document.dto';
@@ -55,23 +55,23 @@ export class CreateCompanyDto {
   @IsString()
   address2: string;
   @IsOptional()
-  @IsNumber()
+  @IsObject()
   city: City;
   @IsOptional()
   @IsString()
   zipcode: string;
   @IsOptional()
-  @IsNumber()
+  @IsObject()
   state: State;
   @IsOptional()
-  @IsNumber()
+  @IsObject()
   country: Country;
   @IsEnum(CompanyStatus)
   status: CompanyStatus;
   @IsOptional()
   @ValidateNested()
   @Type(() => CreateCompanyBankDto)
-  bank: CreateCompanyBankDto;
+  companyBank: CreateCompanyBankDto;
   @ValidateNested({ each: true })
   @Type(() => CreateCompanyDocumentDto)
   documents: CreateCompanyDocumentDto[];

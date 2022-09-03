@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { CompanyBank } from 'src/company/entities/company_bank.entity';
 import {
   Column,

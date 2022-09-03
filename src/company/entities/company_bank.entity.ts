@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -6,14 +5,20 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  RelationId,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Bank } from '../../common/modules/bank/entities/bank.entity';
+import { Company } from './company.entity';
 
-@Entity()
+@Entity('company_bank')
 export class CompanyBank {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToOne(() => Company)
+  @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
+  company: Company;
 
   @Column({ length: 100, nullable: true })
   accountTitle: string;
@@ -24,11 +29,8 @@ export class CompanyBank {
   @Column({ length: 100, nullable: true })
   iban: string;
 
-  @ManyToOne(() => Bank, (bank) => bank.companyBanks, { eager: false })
+  @ManyToOne(() => Bank, (bank) => bank.companyBanks)
   bank: Bank;
-
-  @RelationId((companyBank: CompanyBank) => companyBank.bank)
-  bankId: number;
 
   @Column({ length: 20, nullable: true })
   branchCode: string;
@@ -36,11 +38,9 @@ export class CompanyBank {
   @Column({ default: true })
   status: boolean;
 
-  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

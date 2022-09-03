@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { CompanyDocument } from 'src/company/entities/company_document.entity';
 import {
   Column,
@@ -7,32 +6,33 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('document_type')
 export class DocumentType {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50, nullable: true })
+  @Column()
   documentName: string;
 
-  @Exclude()
-  @Column({ default: false })
+  @Column({ default: true })
   isActive: boolean;
 
-  @Exclude()
+  @Column({ length: 10, default: null })
+  category: string;
+
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 
   @OneToMany(
-    (_type) => CompanyDocument,
+    () => CompanyDocument,
     (companyDocument) => companyDocument.docType,
-    { eager: false },
   )
-  companyDocuments: CompanyDocument[];
+  @JoinColumn()
+  companyDocuments: CompanyDocument;
 }
