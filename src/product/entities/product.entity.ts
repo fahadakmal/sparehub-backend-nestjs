@@ -113,20 +113,20 @@ export class Product {
   @Column({ type: 'timestamptz', nullable: true })
   attDate2: Date;
   @Column({ nullable: true })
-  attd1: number;
+  attId1: number;
   @Column({ nullable: true })
-  attd2: number;
+  attId2: number;
   @Column({ nullable: true })
-  attd3: number;
+  attId3: number;
   @Column({ nullable: true })
-  attd4: number;
+  attId4: number;
 
   @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
   @Column({ length: 100, nullable: true })
-  style: string;
+  styles: string;
   @Column({ nullable: true })
   tags: string;
 
