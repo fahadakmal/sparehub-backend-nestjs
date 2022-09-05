@@ -1,15 +1,16 @@
-import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from './role.entity';
 
-@Entity()
+@Entity('permission')
 export class Permission {
-  @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,23 +20,22 @@ export class Permission {
   @Column()
   description: string;
 
-  @Exclude()
   @Column({ default: true })
   isActive: boolean;
 
-  @Exclude()
   @Column({ length: 10 })
   module: string;
 
-  @Exclude()
   @Column({ length: 20, default: null })
   code: string;
 
-  @Exclude()
+  @ManyToMany(() => Role, (role) => role.permissions)
+  @JoinTable({ name: 'role_permission' })
+  roles: Role[];
+
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/entities/user.entity';
 import { UserRole } from 'src/auth/entities/user_role.entity';
 import { City } from '../../src/common/modules/address/entities/city.entity';
@@ -8,17 +7,11 @@ import { Country } from 'src/common/modules/address/entities/country.entity';
 import { State } from 'src/common/modules/address/entities/state.entity';
 import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 import { Brand } from 'src/common/modules/brand/entities/brand.entity';
-import { CarMadeYear } from 'src/common/modules/car/entities/car_made_year.entity';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
-import { CarType } from 'src/common/modules/car/entities/car_type.entities';
-import { CarVariant } from 'src/common/modules/car/entities/car_variant.entity';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
-import { FileUploadService } from 'src/common/modules/fileUpload/file_upload.service';
-import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
+import { ProdCategory } from 'src/common/modules/product_category/entities/prod_category.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
-import { CompanyService } from 'src/company/company.service';
-import { ProductService } from 'src/product/product.service';
 import { Permission } from 'src/role-permission/entities/permission.entity';
 import { Role } from 'src/role-permission/entities/role.entity';
 import { Repository } from 'typeorm';
@@ -44,18 +37,13 @@ export class SeederService {
     private carMakeRepositery: Repository<CarMake>,
     @InjectRepository(CarModel)
     private carModelRepositery: Repository<CarModel>,
-    @InjectRepository(CarVariant)
-    private carVariantRepositery: Repository<CarVariant>,
-    @InjectRepository(CarType)
-    private carTypeRepositery: Repository<CarType>,
-    @InjectRepository(CarMadeYear)
-    private carMadeYearRepositery: Repository<CarMadeYear>,
+
     @InjectRepository(Role)
     private roleRepositery: Repository<Role>,
     @InjectRepository(Permission)
     private permissionRepositery: Repository<Permission>,
-    @InjectRepository(ProductCategory)
-    private productCategoryRepo: Repository<ProductCategory>,
+    @InjectRepository(ProdCategory)
+    private prodCategoryRepo: Repository<ProdCategory>,
     @InjectRepository(ProductType)
     private productTypeRepositery: Repository<ProductType>,
     @InjectRepository(DocumentType)
@@ -74,8 +62,13 @@ export class SeederService {
       const countries = await this.countryRepositery.find();
       const country = this.countryRepositery.create({
         countryCode: 'SA',
-        countryName: 'Saudi Arab',
-        countryNameAr: 'Al saudi arab',
+        countryName: 'Saudi Arabia',
+        countryNameAr: 'المملكة العربية السعودية',
+        dialCode: '+966',
+        flag: '🇸🇦',
+        mobilePrefix: '',
+        countryCodeSO3: '',
+        IbanLength: 14,
       });
       if (!countries.length) {
         await this.countryRepositery.save(country);
@@ -85,9 +78,12 @@ export class SeederService {
       const states = await this.stateRepositery.find();
 
       const state = this.stateRepositery.create({
-        stateCode: 'PU',
-        stateName: 'RIYADH',
-        stateNameAr: 'Al-Riyadh',
+        stateCode: 'SA.TB',
+        stateName: 'Tabūk',
+        stateNameAr: 'Al-Ajman',
+        iso: '7',
+        fips: 'SA19',
+        capital: 'Tabuk',
         country,
       });
       if (!states.length) {
@@ -98,9 +94,11 @@ export class SeederService {
 
       //seed city in db
       const city = this.cityRepositery.create({
-        cityName: 'Madinah',
-        cityNameAr: 'Al-Madinah',
+        cityName: 'Al-Wajh',
+        cityNameAr: 'الوجه',
         state,
+        country,
+        stateCode1: 'TBK',
       });
       if (!cities.length) {
         await this.cityRepositery.save(city);
@@ -108,10 +106,10 @@ export class SeederService {
 
       await this.createRolesAndPermissions();
 
-      const productCategories = await this.productCategoryRepo.find();
+      const prodCategories = await this.prodCategoryRepo.find();
 
       //seed product category
-      const productCategory = this.productCategoryRepo.create({
+      const prodCategory = this.prodCategoryRepo.create({
         name: 'Auto Body Parts & Mirrors',
         nameAr: '01-اسم التصنيف',
         description: 'Auto Body Parts & Mirrors',
@@ -126,8 +124,8 @@ export class SeederService {
         sortOrder: 1,
         isActive: true,
       });
-      if (!productCategories.length) {
-        await this.productCategoryRepo.save(productCategory);
+      if (!prodCategories.length) {
+        await this.prodCategoryRepo.save(prodCategory);
       }
 
       // seed product type
@@ -150,7 +148,8 @@ export class SeederService {
       const banks = await this.bankRepositery.find();
 
       const bank = this.bankRepositery.create({
-        name: 'Meezan Bank',
+        name: 'Al Rajhi Bank',
+        nameAr: 'مصرف الراجحي',
         country,
       });
       if (!banks.length) {
@@ -172,61 +171,43 @@ export class SeederService {
       const carMakes = await this.carMakeRepositery.find();
 
       const carMake = this.carMakeRepositery.create({
-        makeName: 'Toyota',
-        makeNameAr: 'Toyota',
+        make: 'Toyota',
+        makeAr: 'Toyota',
         region: 'Asia',
       });
       if (!carMakes.length) {
         await this.carMakeRepositery.save(carMake);
       }
 
-      //seed car type
-      const carTypes = await this.carTypeRepositery.find();
-
-      const carType = this.carTypeRepositery.create({
-        carTypeName: 'Sedan',
-        carTypeNameAr: 'Sedan',
-        make: carMake,
-      });
-      if (!carTypes.length) {
-        await this.carTypeRepositery.save(carType);
-      }
-
       //seed car model
       const carModels = await this.carModelRepositery.find();
 
+      const variants = [
+        { name: '4Runner-turbo', years: '2010,2020,2021,2022' },
+        { name: '4Runner-1.8', years: '2009,2006,2002,2022' },
+      ];
       const carModel = this.carModelRepositery.create({
-        modelName: 'Corolla',
-        modelNameAr: 'Corolla',
-        region: 'Asia',
+        make: carMake,
+        modelAr: '4Runner',
+        model: '4Runner',
+        variant: variants,
+        carTypes: ['Sedan', 'Coupe'],
         sortOrder: 1,
-        carType,
+        region: 'Asia',
+        modelYear: '2010',
+      });
+
+      const carModel1 = this.carModelRepositery.create({
+        make: carMake,
+        modelAr: '4Runner',
+        model: '4Runner',
+        carTypes: ['Sedan', 'Coupe'],
+        region: 'Asia',
+        modelYear: '2020',
       });
       if (!carModels.length) {
         await this.carModelRepositery.save(carModel);
-      }
-      //seed car variant
-      const carVariants = await this.carVariantRepositery.find();
-
-      const carVriant = this.carVariantRepositery.create({
-        variantName: 'XLI',
-        variantNameAr: 'XLI',
-        model: carModel,
-        region: 'Asia',
-      });
-      if (!carVariants.length) {
-        await this.carVariantRepositery.save(carVriant);
-      }
-
-      //seed car made year
-      const carMadeYears = await this.carMadeYearRepositery.find();
-
-      const carMadeYear = this.carMadeYearRepositery.create({
-        madeYear: '2016',
-        variant: carVriant,
-      });
-      if (!carMadeYears.length) {
-        await this.carMadeYearRepositery.save(carMadeYear);
+        await this.carModelRepositery.save(carModel1);
       }
 
       //seed document type in db
@@ -298,31 +279,31 @@ export class SeederService {
       role.roleName = 'Sparehub Admin';
       role.roleDescription = 'Seller ';
       role.permissions = [permission1];
-      role.module = 'SPAREHUB';
+      role.moduleId = 'SPAREHUB';
 
       const role1 = new Role();
       role1.roleName = 'Seller Admin';
-      role1.module = 'SPAREHUB';
+      role1.moduleId = 'SPAREHUB';
       role1.permissions = [permission2];
 
       const role2 = new Role();
       role2.roleName = 'Product Catalog';
-      role2.module = 'SPAREHUB';
+      role2.moduleId = 'SPAREHUB';
       role2.permissions = [permission3, permission4];
 
       const role3 = new Role();
       role3.roleName = 'Order Processor';
-      role3.module = 'SPAREHUB';
+      role3.moduleId = 'SPAREHUB';
       role3.permissions = [permission5, permission6];
 
       const role4 = new Role();
       role4.roleName = 'Review Mgr';
-      role4.module = 'SPAREHUB';
+      role4.moduleId = 'SPAREHUB';
       role4.permissions = [permission7, permission8];
 
       const role5 = new Role();
       role5.roleName = 'Seller Super Admin';
-      role5.module = 'SPAREHUB';
+      role5.moduleId = 'SPAREHUB';
       role5.permissions = [
         permission1,
         permission2,

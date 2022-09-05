@@ -2,11 +2,9 @@ import { Expose } from 'class-transformer';
 
 export class CarModelDto {
   @Expose()
-  id: number;
+  model: string;
   @Expose()
-  modelName: string;
-  @Expose()
-  modelNameAr: string;
+  modelAr: string;
   @Expose()
   region: string;
   @Expose()

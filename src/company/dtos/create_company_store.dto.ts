@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { City } from 'src/common/modules/address/entities/city.entity';
 import { Country } from 'src/common/modules/address/entities/country.entity';
 import { State } from 'src/common/modules/address/entities/state.entity';
@@ -21,16 +27,16 @@ export class CreateCompanyStoreoDto {
   @IsString()
   address2: string;
   @IsOptional()
-  @IsNumber()
+  @IsObject()
   city: City;
   @IsOptional()
   @IsString()
   zipcode: string;
   @IsOptional()
-  @IsNumber()
+  @IsObject()
   state: State;
-  @IsNumber()
   @IsOptional()
+  @IsObject()
   country: Country;
   @IsOptional()
   @IsString()

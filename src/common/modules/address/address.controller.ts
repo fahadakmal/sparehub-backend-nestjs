@@ -27,13 +27,13 @@ export class AddressController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('/:id/states')
-  getStates(@Param('id') countryId: number): Promise<State[]> {
-    return this.addressService.getStates(countryId);
+  getStates(@Param('id') countryCode: string): Promise<State[]> {
+    return this.addressService.getStates(countryCode);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('/:id/cities')
-  getCities(@Param('id') stateId: number): Promise<City[]> {
-    return this.addressService.getCities(stateId);
+  getCities(@Param('id') stateCode: string): Promise<City[]> {
+    return this.addressService.getCities(stateCode);
   }
 }
