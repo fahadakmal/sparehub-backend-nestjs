@@ -13,19 +13,19 @@ export class Brand {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   brandName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   brandNameAr: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   logo: string;
 
-  @Column()
+  @Column({ nullable: true })
   sortOrder: number;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: true })
   isActive: boolean;
 
   @OneToMany(() => Product, (product) => product.brand, {

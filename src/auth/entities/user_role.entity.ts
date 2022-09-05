@@ -13,20 +13,20 @@ export class UserRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Role, {})
+  @ManyToOne(() => Role, { nullable: false })
   @JoinColumn({ name: 'roleId', referencedColumnName: 'id' })
   role: Role;
 
-  @Column({ type: 'timestamptz', default: null })
+  @Column({ type: 'timestamptz', nullable: true })
   assignDate: Date;
 
-  @Column({ default: null })
-  assignedBy: number;
+  @Column({ length: 50, nullable: true })
+  assignedBy: string;
 
-  @Column({ type: 'timestamptz', default: null })
+  @Column({ type: 'timestamptz', nullable: true })
   expiryDate: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   user: User;
 }

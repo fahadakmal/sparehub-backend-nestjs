@@ -19,33 +19,33 @@ export class CompanyStore {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { nullable: false })
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
-  @Column()
+  @Column({ nullable: true })
   storeName: string;
 
-  @Column()
+  @Column({ nullable: true })
   storeDisplayName: string;
 
-  @Column()
+  @Column({ nullable: true })
   address1: string;
 
-  @Column()
+  @Column({ nullable: true })
   address2: string;
 
-  @ManyToOne(() => City, (city) => city.companyStores)
+  @ManyToOne(() => City, (city) => city.companyStores, { nullable: true })
   city: City;
 
   @Column({ length: 10, nullable: true })
   zipcode: string;
 
-  @ManyToOne(() => State)
+  @ManyToOne(() => State, { nullable: true })
   @JoinColumn({ name: 'stateId', referencedColumnName: 'stateCode' })
   state: State;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
@@ -58,7 +58,7 @@ export class CompanyStore {
   @Column({ length: 20, nullable: true })
   storePhone: string;
 
-  @Column({ default: false })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
   @OneToMany(
