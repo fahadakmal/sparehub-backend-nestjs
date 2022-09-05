@@ -1,15 +1,27 @@
 import {
-  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateProductDto } from './dtos/create_product.dto';
-import { Product } from './entities/product.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { CompanyService } from 'src/company/company.service';
+import { Brackets, Repository } from 'typeorm';
+import { CreateProductDto } from './dtos/create_product.dto';
+import { Product } from './entities/product.entity';
+
+type query = {
+  search: string;
+  status: string;
+  order: string;
+  page: number;
+  orderCol: string;
+};
+
+type productListing = {
+  products: Product[];
+  totalCount: number;
+};
 
 @Injectable()
 export class ProductService {
@@ -32,6 +44,58 @@ export class ProductService {
       await this.productRepositery.save(product);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async getProductsListing(payload: query): Promise<productListing> {
+    try {
+      const { search, status, order, page, orderCol } = payload;
+      const pageNumber = page ? page : 1;
+      const skip = (pageNumber - 1) * 10;
+      const orderByCol = orderCol ? `product.${orderCol}` : 'product.id';
+      const sort: any = order ? order : 'ASC';
+
+      const query = this.productRepositery
+        .createQueryBuilder('product')
+        .leftJoinAndSelect('product.fitments', 'product_fitments');
+
+      if (!!search) {
+        query.where(
+          new Brackets((qb) => {
+            qb.where('product.productName iLike :productName', {
+              productName: `%${search}%`,
+            })
+              .orWhere('product.itemCode iLike :itemCode', {
+                itemCode: `%${search}%`,
+              })
+              .orWhere('product.barcode iLike :barcode', {
+                barcode: `%${search}%`,
+              });
+          }),
+        );
+      }
+      if (!!status) {
+        query.andWhere('product.status =:status', {
+          status: `${status}`,
+        });
+      }
+      query.orderBy(orderByCol, sort);
+      if (!!page) {
+        query.skip(skip);
+        query.take(10);
+      }
+      const [products, count] = await query.getManyAndCount();
+
+      if (!products) {
+        throw new NotFoundException();
+      }
+      const productListing = {
+        products: products,
+        totalCount: count,
+      };
+      return productListing;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 
