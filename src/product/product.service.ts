@@ -5,18 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
+import { SortingOrder } from 'src/common/constants/enums/sortingOrder.enum';
 import { CompanyService } from 'src/company/company.service';
 import { Brackets, Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/create_product.dto';
+import { GetProductsFilterDto } from './dtos/get-products-filter.dto';
 import { Product } from './entities/product.entity';
-
-type query = {
-  search: string;
-  status: string;
-  order: string;
-  page: number;
-  orderCol: string;
-};
 
 type productListing = {
   products: Product[];
@@ -47,55 +41,62 @@ export class ProductService {
     }
   }
 
-  async getProductsListing(payload: query): Promise<productListing> {
+  async getProducts(
+    getProductsFiterDto: GetProductsFilterDto,
+    user: User,
+  ): Promise<productListing> {
     try {
-      const { search, status, order, page, orderCol } = payload;
-      const pageNumber = page ? page : 1;
-      const skip = (pageNumber - 1) * 10;
+      const company = await this.companyService.getCompany(user);
+      if (!company) {
+        throw new NotFoundException(
+          'There is no company linked to your account',
+        );
+      }
+      const { search, status, order, page, orderCol, limit } =
+        getProductsFiterDto;
+      const pageNumber = page ? parseInt(page) : 1;
+      const recordsLimit = limit ? parseInt(limit) : 10;
+      const skip = (pageNumber - 1) * recordsLimit;
       const orderByCol = orderCol ? `product.${orderCol}` : 'product.id';
-      const sort: any = order ? order : 'ASC';
+      const sort: SortingOrder = order ? order : SortingOrder.ASC;
 
       const query = this.productRepositery
         .createQueryBuilder('product')
         .leftJoinAndSelect('product.fitments', 'product_fitments');
 
-      if (!!search) {
+      query.where('(product.coId = :coId)', { coId: company.id });
+
+      if (search) {
         query.where(
-          new Brackets((qb) => {
-            qb.where('product.productName iLike :productName', {
-              productName: `%${search}%`,
-            })
-              .orWhere('product.itemCode iLike :itemCode', {
-                itemCode: `%${search}%`,
-              })
-              .orWhere('product.barcode iLike :barcode', {
-                barcode: `%${search}%`,
-              });
-          }),
+          '(product.productName iLike :search OR product.itemCode iLike :search OR product.barcode iLike :search)',
+          {
+            search: `%${search}%`,
+          },
         );
       }
       if (!!status) {
-        query.andWhere('product.status =:status', {
+        query.andWhere('product.status = :status', {
           status: `${status}`,
         });
       }
       query.orderBy(orderByCol, sort);
       if (!!page) {
         query.skip(skip);
-        query.take(10);
+        query.take(recordsLimit);
       }
       const [products, count] = await query.getManyAndCount();
 
       if (!products) {
-        throw new NotFoundException();
+        throw new NotFoundException('Products not found');
       }
+
       const productListing = {
         products: products,
         totalCount: count,
       };
       return productListing;
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error.meesage);
     }
   }
 
