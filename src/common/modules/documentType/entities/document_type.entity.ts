@@ -14,13 +14,13 @@ export class DocumentType {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   documentName: string;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
-  @Column({ length: 10, default: null })
+  @Column({ length: 10, nullable: true })
   category: string;
 
   @CreateDateColumn()

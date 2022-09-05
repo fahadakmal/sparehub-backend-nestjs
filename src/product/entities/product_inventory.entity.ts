@@ -14,13 +14,17 @@ export class ProductInventory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   quantity: number;
 
-  @ManyToOne(() => CompanyStore, (store) => store.productToInventory)
+  @ManyToOne(() => CompanyStore, (store) => store.productToInventory, {
+    nullable: true,
+  })
   store: CompanyStore;
 
-  @ManyToOne(() => Product, (product) => product.productToInventory)
+  @ManyToOne(() => Product, (product) => product.productToInventory, {
+    nullable: true,
+  })
   product: Product;
 
   @CreateDateColumn()

@@ -14,22 +14,22 @@ export class Permission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   permissionName: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   module: string;
 
-  @Column({ length: 20, default: null })
+  @Column({ length: 20, nullable: true })
   code: string;
 
-  @ManyToMany(() => Role, (role) => role.permissions)
+  @ManyToMany(() => Role, (role) => role.permissions, { nullable: true })
   @JoinTable({ name: 'role_permission' })
   roles: Role[];
 

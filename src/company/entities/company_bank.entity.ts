@@ -16,11 +16,11 @@ export class CompanyBank {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Company)
+  @OneToOne(() => Company, { nullable: false })
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100, nullable: false })
   accountTitle: string;
 
   @Column({ length: 100, nullable: true })
@@ -29,13 +29,13 @@ export class CompanyBank {
   @Column({ length: 100, nullable: true })
   iban: string;
 
-  @ManyToOne(() => Bank, (bank) => bank.companyBanks)
+  @ManyToOne(() => Bank, (bank) => bank.companyBanks, { nullable: true })
   bank: Bank;
 
   @Column({ length: 20, nullable: true })
   branchCode: string;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   status: boolean;
 
   @CreateDateColumn()

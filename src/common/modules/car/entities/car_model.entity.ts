@@ -13,32 +13,32 @@ import { CarMake } from './car_make.entity';
 
 @Entity('car_model')
 export class CarModel {
-  @ManyToOne(() => CarMake)
+  @ManyToOne(() => CarMake, { nullable: false })
   @JoinColumn({ name: 'make', referencedColumnName: 'make' })
   make: CarMake;
 
   @PrimaryColumn({ length: 50 })
   model: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   modelYear: string;
 
   @Column('jsonb', { nullable: true })
   variant?: object[];
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   region: string;
 
   @Column('simple-array', { nullable: true })
   carTypes: string[];
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   modelAr: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   sortOrder: number;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: true })
   isActive: boolean;
 
   @OneToMany(() => ProductFitment, (productFitment) => productFitment.model)
