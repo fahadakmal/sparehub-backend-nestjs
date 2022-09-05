@@ -15,8 +15,8 @@ export class BankController {
   constructor(private bankService: BankService) {}
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('/:countryId')
-  getBanks(@Param('countryId') countryId: number): Promise<Bank[]> {
-    return this.bankService.getBanks(countryId);
+  @Get('/:countryCode')
+  getBanks(@Param('countryCode') countryCode: string): Promise<Bank[]> {
+    return this.bankService.getBanks(countryCode);
   }
 }

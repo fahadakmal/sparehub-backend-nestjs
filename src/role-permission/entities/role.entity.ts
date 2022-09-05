@@ -1,9 +1,9 @@
-import { Exclude } from 'class-transformer';
 import { UserRole } from 'src/auth/entities/user_role.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -12,40 +12,34 @@ import {
 } from 'typeorm';
 import { Permission } from './permission.entity';
 
-@Entity()
+@Entity('role')
 export class Role {
-  @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Exclude()
-  @Column({ length: 20 })
+  @Column({ length: 50 })
   roleName: string;
 
-  @Exclude()
   @Column({ default: null })
   roleDescription: string;
 
-  @Exclude()
   @Column({ length: 10 })
-  module: string;
+  moduleId: string;
 
-  @Exclude()
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToMany((type) => Permission, { eager: true })
-  @JoinTable()
+  @ManyToMany(() => Permission, (permission) => permission.roles)
+  @JoinTable({ name: 'role_permission' })
   permissions: Permission[];
 
   @OneToMany(() => UserRole, (userRole) => userRole.role)
-  userRoles: UserRole[];
+  @JoinColumn()
+  userRoles: UserRole;
 
-  @Exclude()
   @CreateDateColumn()
   createdOn: Date;
 
-  @Exclude()
   @UpdateDateColumn()
   updatedOn: Date;
 }

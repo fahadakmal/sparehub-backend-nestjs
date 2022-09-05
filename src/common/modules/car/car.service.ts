@@ -5,11 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CarMadeYear } from './entities/car_made_year.entity';
 import { CarMake } from './entities/car_make.entity';
 import { CarModel } from './entities/car_model.entity';
-import { CarType } from './entities/car_type.entities';
-import { CarVariant } from './entities/car_variant.entity';
 
 @Injectable()
 export class CarService {
@@ -18,15 +15,9 @@ export class CarService {
     private carMakeRepositery: Repository<CarMake>,
     @InjectRepository(CarModel)
     private carModelRepositery: Repository<CarModel>,
-    @InjectRepository(CarVariant)
-    private carVariantRepositery: Repository<CarVariant>,
-    @InjectRepository(CarType)
-    private carTypeRepositery: Repository<CarType>,
-    @InjectRepository(CarMadeYear)
-    private carMadeYearRepositery: Repository<CarMadeYear>,
   ) {}
 
-  async getCarMakers(): Promise<CarMake[]> {
+  async getCarMakes(): Promise<CarMake[]> {
     try {
       const carMakers = await this.carMakeRepositery.findBy({ isActive: true });
       if (!carMakers) {
@@ -38,61 +29,63 @@ export class CarService {
     }
   }
 
-  async getMakerTypes(makerId: string): Promise<CarType[]> {
+  async getMakeModels(make: string): Promise<CarModel[]> {
     try {
-      const carTypes = await this.carTypeRepositery.findBy({
-        isActive: true,
-        make: { id: parseInt(makerId) },
-      });
+      const query = this.carModelRepositery.createQueryBuilder('car_model');
+
+      query.where('(car_model.make iLike :make)', { make: `%${make}%` });
+      query.select('car_model.model');
+      const models = await query.getMany();
+      if (!models) {
+        throw new NotFoundException();
+      }
+      return models;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getModelVariants(model: string): Promise<CarModel> {
+    try {
+      const query = this.carModelRepositery.createQueryBuilder('car_model');
+      query.where('(car_model.model iLike :model)', { model: model });
+      query.select('car_model.variant');
+      const variants = await query.getOne();
+      if (!variants) {
+        throw new NotFoundException();
+      }
+      return variants;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  async getModelCarTypes(model: string): Promise<CarModel> {
+    try {
+      const query = this.carModelRepositery.createQueryBuilder('car_model');
+      query.where('(car_model.model iLike :model)', { model: model });
+      query.select('car_model.carTypes');
+      const carTypes = await query.getOne();
       if (!carTypes) {
         throw new NotFoundException();
       }
       return carTypes;
     } catch (error) {
-      throw new BadRequestException();
+      throw new BadRequestException(error.message);
     }
   }
 
-  async getTypeModels(typeId: string): Promise<CarModel[]> {
+  async getModelYears(model: string): Promise<CarModel> {
     try {
-      const typeModels = await this.carModelRepositery.findBy({
-        isActive: true,
-        carType: { id: parseInt(typeId) },
-      });
-      if (!typeModels) {
+      const query = this.carModelRepositery.createQueryBuilder('car_model');
+      query.where('(car_model.model iLike :model)', { model: model });
+      query.select('car_model.modelYear');
+      const modelYear = await query.getOne();
+      if (!modelYear) {
         throw new NotFoundException();
       }
-      return typeModels;
+      return modelYear;
     } catch (error) {
-      throw new BadRequestException();
-    }
-  }
-
-  async getModelVariants(modelId: string): Promise<CarVariant[]> {
-    try {
-      const modelVariants = await this.carVariantRepositery.findBy({
-        model: { id: parseInt(modelId) },
-      });
-      if (!modelVariants) {
-        throw new NotFoundException();
-      }
-      return modelVariants;
-    } catch (error) {
-      throw new BadRequestException();
-    }
-  }
-
-  async getVariantMadeYears(variantId: string): Promise<CarMadeYear[]> {
-    try {
-      const variantMadeYears = await this.carMadeYearRepositery.findBy({
-        variant: { id: parseInt(variantId) },
-      });
-      if (!variantMadeYears) {
-        throw new NotFoundException();
-      }
-      return variantMadeYears;
-    } catch (error) {
-      throw new BadRequestException();
+      throw new BadRequestException(error.message);
     }
   }
 }

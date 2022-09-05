@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/entities/user.entity';
+import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dtos/create_company.dto';
 import { Company } from './entities/company.entity';
@@ -28,11 +29,22 @@ export class CompanyService {
   ) {}
 
   async saveCompany(user: User, createCompanyDto: CreateCompanyDto) {
+    const { companyBank, ...rest } = createCompanyDto;
     try {
       const company = this.companyRepositery.create({
-        ...createCompanyDto,
+        ...rest,
       });
       await this.companyRepositery.save(company);
+      if (companyBank) {
+        const companyBankToSave = this.companyBankRepositery.create({
+          ...companyBank,
+        });
+        await this.companyBankRepositery.save({
+          ...companyBankToSave,
+          company,
+        });
+      }
+
       await this.authService.updateUserForCompanny(user, company);
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -42,14 +54,39 @@ export class CompanyService {
   async getCompany(user: User) {
     try {
       const companyId: any = await this.authService.getUserCompanyId(user);
-      const company = await this.companyRepositery.findOne({
-        where: { id: companyId },
-        relations: ['stores', 'bank', 'documents'],
-      });
+
+      const query = this.companyRepositery.createQueryBuilder('company');
+
+      query.where('(company.id = :companyId)', { companyId: companyId });
+
+      query
+        .leftJoinAndSelect('company.city', 'city')
+        .leftJoinAndSelect('company.country', 'country')
+        .leftJoinAndSelect('company.state', 'state')
+
+        .leftJoinAndSelect('company.documents', 'company_document')
+        .leftJoinAndSelect('company_document.docType', 'document_type')
+
+        .leftJoinAndSelect('company.stores', 'company_store')
+        .leftJoinAndSelect('company_store.city', 'citi')
+        .leftJoinAndSelect('company_store.country', 'countri')
+        .leftJoinAndSelect('company_store.state', 'stote');
+
+      const company = await query.getOne();
       if (!company) {
         throw new NotFoundException();
       }
-      return company;
+      const query1 =
+        this.companyBankRepositery.createQueryBuilder('company_bank');
+      let companyBank = await query1
+        .where('(company_bank.coId = :companyId)', { companyId: companyId })
+        .leftJoinAndSelect('company_bank.bank', 'bank')
+        .getOne();
+      if (!companyBank) {
+        companyBank = null;
+      }
+
+      return { ...company, companyBank: companyBank };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -11,4 +11,20 @@ export class OnSignUpDto {
 
   @IsString()
   awsUserName: string;
+
+  @IsOptional()
+  @IsString()
+  country: string;
+
+  @IsOptional()
+  @IsString()
+  firstName: string;
+
+  @IsOptional()
+  @IsString()
+  lastName: string;
+
+  @IsOptional()
+  @IsString()
+  language: string;
 }

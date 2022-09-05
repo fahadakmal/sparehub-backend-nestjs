@@ -6,18 +6,18 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProductCategory } from './entities/product_category.entity';
+import { ProdCategory } from './entities/prod_category.entity';
 
 @Injectable()
 export class ProductCategoryService {
   constructor(
-    @InjectRepository(ProductCategory)
-    private productCategoryRepo: Repository<ProductCategory>,
+    @InjectRepository(ProdCategory)
+    private prodCategoryRepo: Repository<ProdCategory>,
   ) {}
 
   async getProductCategories() {
     try {
-      const categories = await this.productCategoryRepo.find();
+      const categories = await this.prodCategoryRepo.find();
       if (!categories) {
         throw new NotFoundException();
       }
@@ -29,7 +29,7 @@ export class ProductCategoryService {
 
   async prodcutCategoriesByParentId(productCategoryId: string) {
     try {
-      const categories = await this.productCategoryRepo.find({
+      const categories = await this.prodCategoryRepo.find({
         where: { parentId: parseInt(productCategoryId) },
       });
       if (!categories) {

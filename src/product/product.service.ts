@@ -8,12 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/create_product.dto';
 import { Product } from './entities/product.entity';
-import { ProductFitment } from './entities/product_fitment.entity';
-import { ProductMedia } from './entities/product_media.entity';
-import { ProductInventory } from './entities/product_inventory.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { CompanyService } from 'src/company/company.service';
-import { isArray } from 'class-validator';
 
 @Injectable()
 export class ProductService {
@@ -35,7 +31,7 @@ export class ProductService {
       });
       await this.productRepositery.save(product);
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -45,12 +41,18 @@ export class ProductService {
       query.where('(product.id  = (:productId))', {
         productId: parseInt(productId),
       });
-      query.leftJoinAndSelect('product.fitments', 'product_fitments');
+      query.leftJoinAndSelect('product.fitments', 'product_fitment');
+      query.leftJoinAndSelect('product_fitment.make', 'car_make');
+      query.leftJoinAndSelect('product_fitment.model', 'car_model');
+
       query.leftJoinAndSelect(
         'product.productToInventory',
         'productToInventory',
       );
-      query.leftJoinAndSelect('product.mediaFiles', 'product_media');
+      query.leftJoinAndSelect('productToInventory.store', 'company_store');
+      query.leftJoinAndSelect('product.images', 'product_image');
+      query.leftJoinAndSelect('product.brand', 'brand');
+      query.leftJoinAndSelect('product.categories', 'prod_category');
 
       const product = await query.getOne();
       if (!product) {
@@ -58,7 +60,7 @@ export class ProductService {
       }
       return product;
     } catch (error) {
-      throw new BadRequestException();
+      throw new InternalServerErrorException(error.message);
     }
   }
 }

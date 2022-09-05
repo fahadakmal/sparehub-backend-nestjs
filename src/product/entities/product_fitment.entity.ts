@@ -1,62 +1,38 @@
-import { CarMadeYear } from 'src/common/modules/car/entities/car_made_year.entity';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
-import { CarType } from 'src/common/modules/car/entities/car_type.entities';
-import { CarVariant } from 'src/common/modules/car/entities/car_variant.entity';
+
 import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  RelationId,
+  JoinColumn,
+  Column,
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity()
+@Entity('product_fitment')
 export class ProductFitment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, (product) => product.fitments, {
-    eager: false,
-  })
+  @ManyToOne(() => Product, (product) => product.fitments)
   product: Product;
 
-  @ManyToOne(() => CarMake, (carMake) => carMake.products, {
-    eager: false,
-  })
-  carMake: CarMake;
-  @RelationId((productFitment: ProductFitment) => productFitment.carMake)
-  carMakeId: number;
-  @ManyToOne(() => CarType, (carType) => carType.products, {
-    eager: false,
-  })
-  carType: Product;
-  @RelationId((productFitment: ProductFitment) => productFitment.carType)
-  carTypeId: number;
-  @ManyToOne(() => CarModel, (carModel) => carModel.products, {
-    eager: false,
-  })
-  carModel: CarModel;
+  @ManyToOne(() => CarMake)
+  @JoinColumn({ name: 'make', referencedColumnName: 'make' })
+  make: CarMake;
 
-  @RelationId((productFitment: ProductFitment) => productFitment.carModel)
-  carModelId: number;
+  @ManyToOne(() => CarModel)
+  @JoinColumn({ name: 'model', referencedColumnName: 'model' })
+  model: CarModel;
 
-  @ManyToOne(() => CarVariant, (carVariant) => carVariant.products, {
-    eager: false,
-  })
-  carVariant: CarVariant;
+  @Column({ length: 50, nullable: true })
+  variant: string;
 
-  @RelationId((productFitment: ProductFitment) => productFitment.carVariant)
-  carVariantId: number;
-  @ManyToOne(() => CarMadeYear, (carMadeYear) => carMadeYear.products, {
-    eager: false,
-  })
-  carMadeYear: CarMadeYear;
-
-  @RelationId((productFitment: ProductFitment) => productFitment.carMadeYear)
-  carMadeYearId: number;
+  @Column('int', { array: true })
+  modelYear: number[];
 
   @CreateDateColumn()
   createdOn: Date;

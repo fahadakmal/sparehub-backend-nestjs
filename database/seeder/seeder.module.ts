@@ -24,13 +24,10 @@ import { Country } from 'src/common/modules/address/entities/country.entity';
 import { Bank } from 'src/common/modules/bank/entities/bank.entity';
 import { Brand } from 'src/common/modules/brand/entities/brand.entity';
 import { CarMake } from 'src/common/modules/car/entities/car_make.entity';
-import { CarType } from 'src/common/modules/car/entities/car_type.entities';
 import { CarModel } from 'src/common/modules/car/entities/car_model.entity';
-import { CarVariant } from 'src/common/modules/car/entities/car_variant.entity';
-import { CarMadeYear } from 'src/common/modules/car/entities/car_made_year.entity';
 import { Role } from 'src/role-permission/entities/role.entity';
 import { Permission } from 'src/role-permission/entities/permission.entity';
-import { ProductCategory } from 'src/common/modules/product_category/entities/product_category.entity';
+import { ProdCategory } from 'src/common/modules/product_category/entities/prod_category.entity';
 import { ProductType } from 'src/common/modules/product_type/entities/prodouct_type.entity';
 import { DocumentType } from 'src/common/modules/documentType/entities/document_type.entity';
 
@@ -64,13 +61,10 @@ import { DocumentType } from 'src/common/modules/documentType/entities/document_
       Bank,
       Brand,
       CarMake,
-      CarType,
       CarModel,
-      CarVariant,
-      CarMadeYear,
       Role,
       Permission,
-      ProductCategory,
+      ProdCategory,
       ProductType,
       DocumentType,
     ]),
