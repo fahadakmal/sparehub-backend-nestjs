@@ -28,29 +28,29 @@ export class User {
   @Column({ length: 50, nullable: true })
   lastName: string;
 
-  @Column({ unique: true, length: 50 })
+  @Column({ unique: true, length: 50, nullable: true })
   email: string;
 
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   isEmailVerified: boolean;
 
-  @Column({ unique: true, length: 15 })
+  @Column({ unique: true, length: 15, nullable: true })
   mobile: string;
 
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   isMobileVerified: boolean;
 
   @Column({ nullable: true })
   profilePhoto: string;
 
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   password: string;
 
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   passwordResetCode: string;
 
   @Column({ type: 'timestamptz', nullable: true })
@@ -59,14 +59,14 @@ export class User {
   @Column({ nullable: true, default: 0 })
   failedLoginAttempts: number;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
   @Column({ length: 2, nullable: true })
   language: string;
 
-  @Column({ length: 10, default: 'disabled' })
+  @Column({ length: 10, default: 'disabled', nullable: true })
   status: string;
 
   @OneToMany(() => UserRole, (userRole) => userRole.user)

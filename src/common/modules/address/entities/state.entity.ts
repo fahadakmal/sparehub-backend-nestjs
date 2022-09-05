@@ -18,22 +18,22 @@ export class State {
   @PrimaryColumn({ length: 10 })
   stateCode: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: false })
   stateName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   stateNameAr: string;
 
   @Column({ length: 5, nullable: true })
   iso: string;
 
-  @Column({ length: 5 })
+  @Column({ length: 5, nullable: true })
   fips: string;
 
   @Column({ length: 50, nullable: true })
   capital: string;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: false })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 

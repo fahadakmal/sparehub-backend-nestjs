@@ -67,7 +67,7 @@ export class SeederService {
         dialCode: '+966',
         flag: '🇸🇦',
         mobilePrefix: '',
-        countryCodeSO3: '',
+        countryCodeISO3: '',
         IbanLength: 14,
       });
       if (!countries.length) {

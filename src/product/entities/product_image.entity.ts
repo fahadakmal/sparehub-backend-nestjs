@@ -13,25 +13,25 @@ export class ProductImage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, (product) => product.images)
+  @ManyToOne(() => Product, (product) => product.images, { nullable: false })
   product: Product;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   imageFileName: string;
 
-  @Column({ length: 20, default: null })
+  @Column({ length: 20, nullable: true })
   imageFileExt: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   imageData: string;
 
-  @Column({ length: 200, default: null })
+  @Column({ length: 200, nullable: true })
   imagePath: string;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   imageType: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   sortOrder: number;
 
   @CreateDateColumn()

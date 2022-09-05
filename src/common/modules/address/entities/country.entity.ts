@@ -20,25 +20,25 @@ export class Country {
   @PrimaryColumn({ length: 2 })
   countryCode: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: false })
   countryName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   countryNameAr: string;
 
-  @Column({ length: 5 })
+  @Column({ length: 5, nullable: true })
   dialCode: string;
 
-  @Column({ length: 5 })
+  @Column({ length: 5, nullable: true })
   mobilePrefix: string;
 
-  @Column({ length: 3 })
-  countryCodeSO3: string;
+  @Column({ length: 3, nullable: true })
+  countryCodeISO3: string;
 
-  @Column()
+  @Column({ nullable: true })
   IbanLength: number;
 
-  @Column({ length: 2 })
+  @Column({ length: 2, nullable: true })
   flag: string;
 
   @CreateDateColumn()

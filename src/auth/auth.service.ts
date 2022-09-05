@@ -52,7 +52,7 @@ export class AuthService {
     try {
       const savedUser = await this.userRepositery.save(user);
       const userRoleEntry = this.userRoleepositery.create({
-        assignedBy: 1,
+        assignedBy: 'system ',
         user: savedUser,
         role: supersellerRoleawait,
       });

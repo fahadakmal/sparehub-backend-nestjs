@@ -15,7 +15,7 @@ export class CompanyDocument {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { nullable: false })
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
@@ -25,10 +25,11 @@ export class CompanyDocument {
   @ManyToOne(
     () => DocumentType,
     (documentType) => documentType.companyDocuments,
+    { nullable: true },
   )
   docType: DocumentType;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
   @CreateDateColumn()

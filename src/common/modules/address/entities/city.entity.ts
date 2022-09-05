@@ -18,20 +18,20 @@ export class City {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: false })
   cityName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   cityNameAr: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   stateCode1: string;
 
-  @ManyToOne(() => State)
+  @ManyToOne(() => State, { nullable: false })
   @JoinColumn({ name: 'stateCode', referencedColumnName: 'stateCode' })
   state: State;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
