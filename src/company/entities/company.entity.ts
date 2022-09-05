@@ -10,7 +10,6 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { City } from 'src/common/modules/address/entities/city.entity';
-import { CompanyBank } from './company_bank.entity';
 import { CompanyDocument } from './company_document.entity';
 import { CompanyStore } from './company_store.entity';
 import { State } from '../../common/modules/address/entities/state.entity';
@@ -23,10 +22,10 @@ export class Company {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: false })
   companyName: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   companyNameAr: string;
 
   @Column({ length: 100, nullable: true })
@@ -35,7 +34,7 @@ export class Company {
   @Column({ length: 100, nullable: true })
   displayNameAr: string;
 
-  @Column({ length: 10, nullable: true })
+  @Column({ length: 10, nullable: false })
   businessType: string;
 
   @Column({ length: 50, nullable: true })
@@ -50,7 +49,7 @@ export class Company {
   @Column({ length: 50, nullable: true })
   email: string;
 
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   isEmailVerified: boolean;
 
   @Column({ length: 100, nullable: true })
@@ -62,17 +61,17 @@ export class Company {
   @Column({ nullable: true })
   address2: string;
 
-  @ManyToOne(() => City, (city) => city.companyStores)
+  @ManyToOne(() => City, (city) => city.companyStores, { nullable: true })
   city: City;
 
   @Column({ length: 10, nullable: true })
   zipcode: string;
 
-  @ManyToOne(() => State)
+  @ManyToOne(() => State, { nullable: true })
   @JoinColumn({ name: 'stateCode', referencedColumnName: 'stateCode' })
   state: State;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 

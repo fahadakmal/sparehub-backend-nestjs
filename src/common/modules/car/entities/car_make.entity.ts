@@ -15,16 +15,16 @@ export class CarMake {
   @PrimaryColumn({ length: 50 })
   make: string;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   makeAr: string;
 
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: true })
   region: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   logo: string;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: true })
   isActive: boolean;
 
   @OneToMany(() => CarModel, (model) => model.make)

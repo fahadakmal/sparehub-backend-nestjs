@@ -16,17 +16,17 @@ export class Bank {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: false })
   name: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   nameAr: string;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
   @CreateDateColumn()

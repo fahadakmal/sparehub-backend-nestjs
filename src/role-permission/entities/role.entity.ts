@@ -17,19 +17,21 @@ export class Role {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   roleName: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   roleDescription: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   moduleId: string;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
-  @ManyToMany(() => Permission, (permission) => permission.roles)
+  @ManyToMany(() => Permission, (permission) => permission.roles, {
+    nullable: true,
+  })
   @JoinTable({ name: 'role_permission' })
   permissions: Permission[];
 

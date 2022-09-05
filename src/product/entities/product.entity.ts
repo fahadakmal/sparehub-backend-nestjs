@@ -25,138 +25,154 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, { nullable: true })
   @JoinColumn({ name: 'coId', referencedColumnName: 'id' })
   company: Company;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   productName: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   itemCode: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   description: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   descriptionAr: string;
 
-  @ManyToOne(() => ProductType, (productType) => productType.products)
+  @ManyToOne(() => ProductType, (productType) => productType.products, {
+    nullable: true,
+  })
   type: ProductType;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   categoryId: number;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   subCategoryId: number;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   _vendorId: number;
 
-  @Column({ length: 50, default: null })
+  @Column({
+    length: 50,
+    nullable: false,
+    default: Math.random().toString(36).slice(2),
+  })
   uid: string;
-  @Column({ length: 50, default: null })
+  @Column({ length: 50, nullable: false })
   uSeqId: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   _vendorPrice: number;
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   _vendorDiscount: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   _purchasePrice: number;
-  @Column({ type: 'decimal', precision: 3, default: null })
+  @Column({ type: 'decimal', precision: 3, nullable: true })
   _purchaseCx: number;
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   _costCustoms: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   _costPrice: number;
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   _margin: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   salePrice: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   discount: number;
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: null })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   salePriceNet: number;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   attText1: string;
-  @Column({ length: 200, default: null })
+  @Column({ length: 200, nullable: true })
   attText2: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attText3: string;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   attText4: string;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   attText5: string;
-  @Column({ length: 300, default: null })
+  @Column({ length: 300, nullable: true })
   attText6: string;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   attText7: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attText8: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attText9: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attText10: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attNumber1: number;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attNumber2: number;
-  @Column({ type: 'timestamptz', default: null })
+  @Column({ type: 'timestamptz', nullable: true })
   attDate1: Date;
-  @Column({ type: 'timestamptz', default: null })
+  @Column({ type: 'timestamptz', nullable: true })
   attDate2: Date;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attd1: number;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attd2: number;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attd3: number;
-  @Column({ default: null })
+  @Column({ nullable: true })
   attd4: number;
 
-  @ManyToOne(() => Country)
+  @ManyToOne(() => Country, { nullable: true })
   @JoinColumn({ name: 'country', referencedColumnName: 'countryCode' })
   country: Country;
 
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   style: string;
-  @Column({ default: null })
+  @Column({ nullable: true })
   tags: string;
 
   @OneToMany(() => ProductImage, (productMedia) => productMedia.product, {
-    eager: false,
     cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],
   })
   images: ProductImage[];
 
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   isInStock: bool;
-  @Column({ length: 50, nullable: false })
+  @Column({ length: 50, nullable: true })
   status: string;
 
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand: Brand;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   productNameAr: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   summaryAr: string;
-  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+  @Column({
+    type: 'decimal',
+    precision: 6,
+    scale: 2,
+    nullable: true,
+  })
   totalStock: number;
-  @Column({ length: 10, default: null })
+  @Column({ length: 10, nullable: true })
   uom: string;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   sku: string;
-  @Column({ length: 100, default: null })
+  @Column({ length: 100, nullable: true })
   barcode: string;
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   sellEvenOutStock: bool;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, nullable: true })
   totalReviews: number;
-  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+  @Column({
+    type: 'decimal',
+    precision: 6,
+    scale: 2,
+    default: 0,
+    nullable: true,
+  })
   avgRating: number;
 
   @OneToMany(

@@ -14,19 +14,19 @@ export class ProdCategory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: false })
   name: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   nameAr: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   description: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   descriptionAr: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   code: string;
 
   @Column({ nullable: true })
@@ -41,7 +41,7 @@ export class ProdCategory {
   @Column({ nullable: true })
   itemCount: number;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   parentId: number;
 
   @Column({ nullable: true })
@@ -50,7 +50,7 @@ export class ProdCategory {
   @Column({ nullable: true })
   sortOrder: number;
 
-  @Column({ default: true })
+  @Column({ default: true, nullable: false })
   isActive: boolean;
 
   @ManyToMany(() => Product)
