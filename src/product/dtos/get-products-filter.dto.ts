@@ -12,11 +12,13 @@ export class GetProductsFilterDto {
 
   @IsOptional()
   @IsString()
-  orderCol?: string;
+  orderBy?: string;
 
+  @IsOptional()
   @IsString()
   page?: string;
 
+  @IsOptional()
   @IsString()
   limit?: string;
 
