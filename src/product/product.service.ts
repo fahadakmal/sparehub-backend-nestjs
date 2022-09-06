@@ -7,15 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { SortingOrder } from 'src/common/constants/enums/sortingOrder.enum';
 import { CompanyService } from 'src/company/company.service';
-import { Brackets, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/create_product.dto';
 import { GetProductsFilterDto } from './dtos/get-products-filter.dto';
 import { Product } from './entities/product.entity';
-
-type productListing = {
-  products: Product[];
-  totalCount: number;
-};
+import { ProductListing } from './interfaces/product-listing.interrface';
 
 @Injectable()
 export class ProductService {
@@ -44,7 +40,7 @@ export class ProductService {
   async getProducts(
     getProductsFiterDto: GetProductsFilterDto,
     user: User,
-  ): Promise<productListing> {
+  ): Promise<ProductListing> {
     try {
       const company = await this.companyService.getCompany(user);
       if (!company) {
