@@ -14,11 +14,9 @@ export class GetProductsFilterDto {
   @IsString()
   orderCol?: string;
 
-  @IsOptional()
   @IsString()
   page?: string;
 
-  @IsOptional()
   @IsString()
   limit?: string;
 
