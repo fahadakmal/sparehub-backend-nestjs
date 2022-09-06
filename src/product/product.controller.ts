@@ -13,7 +13,7 @@ import { AwsCognitoGuard } from 'src/auth/guards/awsCognito.guard';
 import { CreateProductDto } from './dtos/create_product.dto';
 import { GetProductsFilterDto } from './dtos/get-products-filter.dto';
 import { Product } from './entities/product.entity';
-import { ProductListing } from './interfaces/product-listing.interrface';
+import { ProductListingDto } from './dtos/product-listing.dto';
 import { ProductService } from './product.service';
 
 @UseGuards(AwsCognitoGuard)
@@ -32,7 +32,7 @@ export class ProductController {
   getProducts(
     @Query() getProductsFiterDto: GetProductsFilterDto,
     @GetUser() user: User,
-  ): Promise<ProductListing> {
+  ): Promise<ProductListingDto> {
     return this.productService.getProducts(getProductsFiterDto, user);
   }
 

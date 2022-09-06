@@ -1,6 +1,6 @@
 import { Product } from '../entities/product.entity';
 
-export type ProductListing = {
+export type ProductListingDto = {
   products: Product[];
   totalCount: number;
   nextPage: number;

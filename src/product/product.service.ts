@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/create_product.dto';
 import { GetProductsFilterDto } from './dtos/get-products-filter.dto';
 import { Product } from './entities/product.entity';
-import { ProductListing } from './interfaces/product-listing.interrface';
+import { ProductListingDto } from './dtos/product-listing.dto';
 
 @Injectable()
 export class ProductService {
@@ -40,7 +40,7 @@ export class ProductService {
   async getProducts(
     getProductsFiterDto: GetProductsFilterDto,
     user: User,
-  ): Promise<ProductListing> {
+  ): Promise<ProductListingDto> {
     try {
       const company = await this.companyService.getCompany(user);
       if (!company) {
