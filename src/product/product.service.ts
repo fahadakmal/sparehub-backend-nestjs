@@ -48,13 +48,13 @@ export class ProductService {
           'There is no company linked to your account',
         );
       }
-      const { search, status, order, page, orderCol, limit } =
-        getProductsFiterDto;
-      const pageNumber = page ? parseInt(page) : 1;
-      const recordsLimit = limit ? parseInt(limit) : 10;
-      const skip = (pageNumber - 1) * recordsLimit;
-      const orderByCol = orderCol ? `product.${orderCol}` : 'product.id';
-      const sort: SortingOrder = order ? order : SortingOrder.ASC;
+      const { search, status, order, orderBy } = getProductsFiterDto;
+      let page = parseInt(getProductsFiterDto.page);
+      let limit = parseInt(getProductsFiterDto.limit);
+
+      page = !!page && page > 0 ? page - 1 : 1;
+      limit = !!limit && limit > 0 ? limit : 15;
+      const orderByCol = orderBy ? `product.${orderBy}` : 'product.id';
 
       const query = this.productRepositery
         .createQueryBuilder('product')
@@ -75,10 +75,10 @@ export class ProductService {
           status: `${status}`,
         });
       }
-      query.orderBy(orderByCol, sort);
+      query.orderBy(orderByCol, order || SortingOrder.ASC);
       if (!!page) {
-        query.skip(skip);
-        query.take(recordsLimit);
+        query.skip(limit * page);
+        query.take(limit);
       }
       const [products, count] = await query.getManyAndCount();
 
@@ -89,6 +89,9 @@ export class ProductService {
       const productListing = {
         products: products,
         totalCount: count,
+        nextPage: count > (page + 1) * limit ? page + 2 : null,
+        pages: Math.ceil(count / limit),
+        perPageCount: products.length,
       };
       return productListing;
     } catch (error) {
