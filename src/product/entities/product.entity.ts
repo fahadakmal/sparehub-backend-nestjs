@@ -47,12 +47,6 @@ export class Product {
   type: ProductType;
 
   @Column({ nullable: true })
-  categoryId: number;
-
-  @Column({ nullable: true })
-  subCategoryId: number;
-
-  @Column({ nullable: true })
   _vendorId: number;
 
   @Column({
@@ -129,6 +123,9 @@ export class Product {
   styles: string;
   @Column({ nullable: true })
   tags: string;
+
+  @Column({ nullable: true })
+  thumbnail: string;
 
   @OneToMany(() => ProductImage, (productMedia) => productMedia.product, {
     cascade: ['insert', 'update', 'soft-remove', 'remove', 'recover'],

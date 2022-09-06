@@ -34,6 +34,7 @@ import { ProductTypeModule } from './common/modules/product_type/product_type.mo
           port: configService.get('DB_PORT'),
           database: configService.get('DB_DATABASE'),
           password: configService.get('DB_PASSWORD'),
+          schema: configService.get('DB_SCHEMA'),
         };
       },
     }),
